@@ -1,0 +1,1558 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="300">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- 引入jquery.js -->
+    <script src="https://cdn.bootcss.com/echarts/4.1.0.rc2/echarts.min.js"></script>
+    <script src="static/echarts-liquidfill.js"></script>
+    <style>
+        html,body{
+            height: 100%;
+        }
+        body{
+            margin: 0;
+        }
+        td{
+            height: 45px;
+            text-align: center;
+             font-weight: bold;
+             font-size: 18px;
+        }
+        td>div{
+            line-height: 45px
+        }
+
+        table,table tr th, table tr td { border:1px solid #000; }
+    </style>
+</head>
+<body style="background-color: rgba(215,233,245,0.1);height: 100%">
+
+    <div class="div1">
+        <nav class="navbar navbar-inverse">
+            <div style="background-color: rgb(166,230,225);" class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="title1" href="#">仓储中心数据网站</a>
+                </div>
+                <div style="background-color: rgb(166,230,225);color: rgb(0,0,0)" class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav">
+                        <li><a href="{{url_for('index')}}" class="text">主页</a></li>
+                        <li><a href="{{url_for('rk_hm')}}" class="text">虎门入库监控</a></li>
+                        <li><a href="{{url_for('rk_tx')}}" class="text">塘厦入库监控</a></li>
+                        <li><a href="{{url_for('mv_tx')}}" class="text">虎门移动数据</a></li>
+                        <li><a href="{{url_for('mv_tx')}}" class="text">塘厦移动数据</a></li>
+                        <li><a href="{{url_for('rk_hm_abnormal')}}" class="text">虎门入库异常</a></li>
+                        <li class="active1"><a href="#" class="text1">塘厦入库异常</a></li>
+                        <li><a href="{{url_for('hm_diaobo')}}" class="text">虎门调拨监控</a></li>
+                        <li><a href="{{url_for('tx_diaobo')}}" class="text">塘厦调拨监控</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div style="position: relative;width: 95%;height: 70%;margin-left: 2.5%;margin-right: 2.5%;">
+            <table style="border: 1px solid #000;width: 100%">
+                <thead style="border: 1px solid #000">
+                    <tr style="background-color: rgb(10,134,175);color: #fff;font-size: 20px;border: 1px solid #000">
+                        <th colspan="1"class="button_1" style="height:50px;font-size:25px !important">
+                        <button id="btn_1" class="button_1" style="background-color:rgb(10,134,175);" onclick="getDC()">导出数据</button>
+                    </th>
+
+                     <th colspan="10"class="time_level" style="height:50px;font-size:25px !important">入库异常处理数据监控(塘厦仓)</th>
+                    </tr>
+                    <tr style="background-color: rgb(10,134,175);color: #fff;font-size: 20px;">
+                        <th colspan="1" class="time_level">时效</th>
+                        <th colspan="1" class="time_level">0-4H</th>
+                        <th colspan="1" class="time_level">4-12H</th>
+                        <th colspan="1" class="time_level">12-24H</th>
+                        <th colspan="1" class="time_level">24-36H</th>
+                        <th colspan="1" class="time_level">36-48H</th>
+                        <th colspan="1" class="time_level">48-72H</th>
+                        <th colspan="1" class="time_level">72-96H</th>
+                        <th colspan="1" class="time_level">96H-120H</th>
+                        <th colspan="1" class="time_level">120H以上</th>
+                        <th colspan="1" class="time_level">总计</th>
+                    </tr>
+                    <tr class="table3">
+                        <th class="retention"style="width:100px">异常状态</th>
+                        <th class="retention"style="width:100px">笔数</th>
+                        <th class="retention"style="width:100px">笔数</th>
+                        <th class="retention"style="width:100px">笔数</th>
+                        <th class="retention"style="width:100px">笔数</th>
+                        <th class="retention"style="width:100px">笔数</th>
+                        <th class="retention"style="width:100px">笔数</th>
+                        <th class="retention"style="width:100px">笔数</th>
+                        <th class="retention"style="width:100px">笔数</th>
+                        <th class="retention"style="width:100px">笔数</th>
+                        <th class="retention"style="width:100px">笔数</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table3">
+                        <td class=" ">待确认</td>
+                        <td class=" " style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_011" class="progress-bar progress-bar-danger green" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_011" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_012" class="progress-bar progress-bar-danger green" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_012" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_013" class="progress-bar progress-bar-danger green" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_013" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_014" class="progress-bar progress-bar-danger green" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_014" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_015" class="progress-bar progress-bar-danger green" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_015" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_016" class="progress-bar progress-bar-danger green" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_016" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " style="position:relative">
+                            <div class="progress" style="width: 100%;height: 100%;margin-top: 20px ">
+                                <div id="move_shlef_tx_color_017" class="progress-bar progress-bar-danger green" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_017" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " style="position:relative">
+                            <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_018" class="progress-bar progress-bar-danger green" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_018" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_019" class="progress-bar progress-bar-danger green" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_019" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " style="position:relative">
+                            <div class="progress" style="width: 100%;height: 100%;margin-top: 20px ">
+                                <div id="move_shlef_tx_color_0110" class="progress-bar progress-bar-danger green" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_0110" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr class="table3">
+                        <td class=" ">待质控处理</td>
+                        <td class=" " style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_021" class="progress-bar progress-bar-danger green" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_021" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_022" class="progress-bar progress-bar-danger green" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_022" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_023" class="progress-bar progress-bar-danger green" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_023" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_024" class="progress-bar progress-bar-danger green" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_024" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_025" class="progress-bar progress-bar-danger green" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_025" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_026" class="progress-bar progress-bar-danger green" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_026" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " style="position:relative">
+                            <div class="progress" style="width: 100%;height: 100%;margin-top: 20px ">
+                                <div id="move_shlef_tx_color_027" class="progress-bar progress-bar-danger green" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_027" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " style="position:relative">
+                            <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_028" class="progress-bar progress-bar-danger green" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_028" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_029" class="progress-bar progress-bar-danger green" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_029" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " style="position:relative">
+                            <div class="progress" style="width: 100%;height: 100%;margin-top: 20px ">
+                                <div id="move_shlef_tx_color_0210" class="progress-bar progress-bar-danger green" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_0210" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr style="background-color: rgb(10,134,175);color: #fff;font-size: 20px;border: 1px solid #000">
+                      <th colspan="11"class="time_level" style="height:50px;font-size:25px !important">入库异常退货数据监控(塘厦仓)</th>
+                    </tr>
+                    <tr style="background-color: rgb(10,134,175);color: #fff;font-size: 20px;">
+                        <th colspan="1" class="time_level">时效</th>
+                        <th colspan="2" class="time_level">0-12H</th>
+                        <th colspan="1" class="time_level">12-24H</th>
+                        <th colspan="2" class="time_level">24-36H</th>
+                        <th colspan="2" class="time_level">48-72H</th>
+                        <th colspan="2" class="time_level">72H以上</th>
+                        <th colspan="1" class="time_level">总计</th>
+                    </tr>
+                    <tr class="table3">
+                        <th class="retention"style="width:100px">异常状态</th>
+                        <th class="retention" colspan="2" style="width:100px">笔数</th>
+                        <th class="retention"style="width:100px">笔数</th>
+                        <th class="retention" colspan="2" style="width:100px">笔数</th>
+                        <th class="retention" colspan="2" style="width:100px">笔数</th>
+                        <th class="retention" colspan="2" style="width:100px">笔数</th>
+                        <th class="retention"style="width:100px">笔数</th>
+                    </tr>
+
+
+                    <tr class="table3">
+                        <td class=" ">退货(待处理)</td>
+                        <td class=" " colspan="2" style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_031" class="progress-bar progress-bar-danger green" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_031" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_032" class="progress-bar progress-bar-danger green" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_032" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " colspan="2" style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_033" class="progress-bar progress-bar-danger green" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_033" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " colspan="2" style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_034" class="progress-bar progress-bar-danger green" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_034" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " colspan="2" style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_035" class="progress-bar progress-bar-danger green" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_035" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_036" class="progress-bar progress-bar-danger green" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_036" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr style="background-color: rgb(0,48,71);color: #fff;font-size: 20px;border: 1px solid #000">
+                      <th colspan="11"class="time_level" style="height:50px;font-size:25px !important">入库异常处理数据监控(采购)</th>
+                    </tr>
+                    <tr style="background-color: rgb(0,48,71);color: #fff;font-size: 20px;">
+                        <th colspan="1" class="time_level">时效</th>
+                        <th colspan="3" class="time_level">0-24H</th>
+                        <th colspan="2" class="time_level">24-168H</th>
+                        <th colspan="2" class="time_level">168-360H</th>
+                        <th colspan="2" class="time_level">360H以上</th>
+                        <th colspan="1" class="time_level">总计</th>
+                    </tr>
+                    <tr class="table3">
+                        <th class="retention"style="width:100px">异常状态</th>
+                        <th class="retention" colspan="3" style="width:100px">笔数</th>
+                        <th class="retention" colspan="2"style="width:100px">笔数</th>
+                        <th class="retention" colspan="2" style="width:100px">笔数</th>
+                        <th class="retention" colspan="2" style="width:100px">笔数</th>
+                        <th class="retention" colspan="1" style="width:100px">笔数</th>
+                    </tr>
+
+
+
+                    <tr class="table3">
+                        <td class=" ">待获取</td>
+                        <td class=" " colspan="3"style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_041" class="progress-bar progress-bar-danger red2" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_041" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " colspan="2" style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_042" class="progress-bar progress-bar-danger red2" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_042" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" "  colspan="2"style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_043" class="progress-bar progress-bar-danger red2" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_043" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " colspan="2" style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_044" class="progress-bar progress-bar-danger red2" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_044" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_045" class="progress-bar progress-bar-danger red2" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_045" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="table3">
+                        <td class=" ">已获取</td>
+                        <td class=" " colspan="3"style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_051" class="progress-bar progress-bar-danger red2" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_051" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " colspan="2"style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_052" class="progress-bar progress-bar-danger red2" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_052" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" "colspan="2"  style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_053" class="progress-bar progress-bar-danger red2" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_053" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" "colspan="2"  style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_054" class="progress-bar progress-bar-danger red2" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_054" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" "colspan="1"  style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_055" class="progress-bar progress-bar-danger red2" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_055" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="table3">
+                        <td class=" ">等待处理</td>
+                        <td class=" " colspan="3" style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_061" class="progress-bar progress-bar-danger red2" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_061" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " colspan="2" style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_062" class="progress-bar progress-bar-danger red2" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_062" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " colspan="2" style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_063" class="progress-bar progress-bar-danger red2" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_063" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " colspan="2" style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_064" class="progress-bar progress-bar-danger red2" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_064" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                        <td class=" " colspan="1" style="position:relative">
+                            <div class="progress"style="width: 100%;height: 100%;margin-top: 20px">
+                                <div id="move_shlef_tx_color_065" class="progress-bar progress-bar-danger red2" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0;margin-left: 0px;">
+                                </div>
+                                <div class="table4">
+                                <p id="move_shlef_tx_065" style="text-align:center">0</p>
+                            </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr style="background-color: rgb(0,48,71);color: #fff;font-size: 20px;border: 1px solid #000">
+                      <th colspan="11"class="time_level" style="height:50px;font-size:25px !important">入库异常处理数据监控(采购)</th>
+                    </tr>
+
+                    <tr class="table3">
+                        <th class="retention"style="width:100px">异常状态</th>
+                        <th class="retention" colspan="9"style="width:100px">超时异常笔数</th>
+                        <th class="retention" colspan="1" style="width:100px">&nbsp;</th>
+                    </tr>
+                    <tr class="table3">
+                    <td class="retention"  rowspan="1">已获取(超15天)</td>
+                    <td class=" "  colspan="9"style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_071" class="progress-bar progress-bar-danger red2" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_071" style="text-align:center">0</p>
+                        </div>
+                        </div>
+                    <td>&nbsp;</td>
+                    </tr>
+                    <tr class="table3">
+                    <td class="retention"  rowspan="1">等待处理(超30天)</td>
+                    <td class=" "  colspan="9"style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_081" class="progress-bar progress-bar-danger red2" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_081" style="text-align:center">0</p>
+                        </div>
+                        </div>
+                    <td>&nbsp;</td>
+                    </tr>
+                    <tr style="background-color: rgb(0,48,71);color: #fff;font-size: 20px;border: 1px solid #000">
+                      <th colspan="11"class="time_level" style="height:50px;font-size:25px !important">换图周期(采购)</th>
+                    </tr>
+                    <tr class="table3">
+                        <th class="retention"style="width:100px">异常状态</th>
+                        <th class="retention" colspan="9"style="width:100px">换图超时异常笔数</th>
+                        <th class="retention" colspan="1"style="width:100px">&nbsp;</th>
+                    </tr>
+                    <tr class="table3">
+                    <td class="retention"  rowspan="1">采购换图(超30天)</td>
+                    <td class=" "  colspan="9"style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_091" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_091" style="text-align:center">0</p>
+                        </div>
+                        </div>
+                    <td>&nbsp;</td>
+                    </tr>
+                    <!--
+                    <tr style="background-color: rgb(10,134,175);color: #fff;font-size: 20px;border: 1px solid #000">
+                     <th colspan="17"class="time_level" style="height:50px;font-size:25px !important">预警加急框牌</th>
+                    </tr>
+                    <tr class="table3">
+                        <th class="retention">状态</th>
+                        <th class="retention" >收货车</th>
+                        <th class="retention">时效</th>
+                        <th class="retention">状态</th>
+                        <th class="retention">框牌</th>
+                        <th class="retention">时效</th>
+                        <th class="retention">状态</th>
+                        <th class="retention">框牌</th>
+                        <th class="retention">时效</th>
+                        <th class="retention">状态</th>
+                        <th class="retention">框牌</th>
+                        <th class="retention">时效</th>
+                        <th class="retention">状态</th>
+                        <th class="retention">框牌</th>
+                        <th class="retention">时效</th>
+                        <th class="retention" colspan="2">时效</th>
+                    </tr>
+                    <tr class="table3">
+                    <td class="retention"  rowspan="10">待点数</td>
+                    <td id="move_shlef_tx_072">1</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_073" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_073" style="text-align:center">1</p>
+                        </div>
+                        </div>
+                    </td>
+                    <td class="retention"  rowspan="10">待贴码</td>
+                    <td id="move_shlef_tx_075">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_076" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_076" style="text-align:center">1</p>
+                        </div>
+                        </div>
+                    </td>
+                    <td class="retention"  rowspan="10">待功能质检</td>
+                    <td id="move_shlef_tx_078">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_079" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_079" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+
+                    </td>
+                    <td class="retention"  rowspan="10">待上架</td>
+                    <td id="move_shlef_tx_0711">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_0712" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_0712" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+
+                    </td>
+                    <td class="retention"  rowspan="10">上架中</td>
+                    <td id="move_shlef_tx_0714">&nbsp;</td>
+                    <td style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_0715" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_0715" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+                    </td>
+
+                    <td class="  " style="position:relative" colspan="2" rowspan="10">
+                        <div class="progress" style=" width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_1116" class="progress-bar progress-bar-danger red2" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_1116" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+                    </td>
+
+
+
+
+                </tr>
+                    <tr class="table3">
+                    <td id="move_shlef_tx_082">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_083" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_083" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+                    </td>
+                    <td id="move_shlef_tx_085">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_086" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_086" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+                    </td>
+                    <td id="move_shlef_tx_088">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_089" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_089" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+
+                    </td>
+                    <td id="move_shlef_tx_0811">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_0812" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_0812" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+
+                    </td>
+                    <td id="move_shlef_tx_0814">&nbsp;</td>
+                    <td style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_0815" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_0815" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+                    </td>
+
+                </tr>
+                </tr>
+                    <tr class="table3">
+                    <td id="move_shlef_tx_092">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_093" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_093" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+                    </td>
+                    <td id="move_shlef_tx_095">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_096" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_096" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+                    </td>
+                    <td id="move_shlef_tx_098">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_099" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_099" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+
+                    </td>
+                    <td id="move_shlef_tx_0911">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_0912" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_0912" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+
+                    </td>
+                    <td id="move_shlef_tx_0914">&nbsp;</td>
+                    <td style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_0915" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_0915" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+                    </td>
+
+                </tr>
+                </tr>
+                    <tr class="table3">
+                    <td id="move_shlef_tx_102">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_103" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_103" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+                    </td>
+                    <td id="move_shlef_tx_105">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_106" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_106" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+                    </td>
+                    <td id="move_shlef_tx_108">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_109" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_109" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+
+                    </td>
+                    <td id="move_shlef_tx_1011">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_1012" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_1012" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+
+                    </td>
+                    <td id="move_shlef_tx_1014">&nbsp;</td>
+                    <td style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_1015" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_1015" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+                    </td>
+
+                </tr>
+                </tr>
+                    <tr class="table3">
+                    <td id="move_shlef_tx_112">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_113" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_113" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+                    </td>
+                    <td id="move_shlef_tx_115">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_116" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_116" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+                    </td>
+                    <td id="move_shlef_tx_118">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_119" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_119" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+
+                    </td>
+                    <td id="move_shlef_tx_1111">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_1112" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_1112" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+
+                    </td>
+                    <td id="move_shlef_tx_1114">&nbsp;</td>
+                    <td style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_1115" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_1115" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+                    </td>
+
+
+                </tr>
+                </tr>
+                    <tr class="table3">
+                    <td id="move_shlef_tx_122">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_123" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_123" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+                    </td>
+                    <td id="move_shlef_tx_125">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_126" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_126" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+                    </td>
+                    <td id="move_shlef_tx_128">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_129" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_129" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+
+                    </td>
+                    <td id="move_shlef_tx_1211">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_1212" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_1212" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+
+                    </td>
+                    <td id="move_shlef_tx_1214">&nbsp;</td>
+                    <td style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_1215" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_1215" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+                    </td>
+
+
+                </tr>
+                </tr>
+                    <tr class="table3">
+                    <td id="move_shlef_tx_132">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_133" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_133" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+                    </td>
+                    <td id="move_shlef_tx_135">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_136" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_136" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+                    </td>
+                    <td id="move_shlef_tx_138">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_139" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_139" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+
+                    </td>
+                    <td id="move_shlef_tx_1311">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_1312" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_1312" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+
+                    </td>
+                    <td id="move_shlef_tx_1314">&nbsp;</td>
+                    <td style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_1315" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_1315" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+                    </td>
+
+
+                </tr>
+                </tr>
+                    <tr class="table3">
+                    <td id="move_shlef_tx_142">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_143" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_143" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+                    </td>
+                    <td id="move_shlef_tx_145">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_146" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_146" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+                    </td>
+                    <td id="move_shlef_tx_148">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_149" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_149" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+
+                    </td>
+                    <td id="move_shlef_tx_1411">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_1412" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_1412" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+
+                    </td>
+                    <td id="move_shlef_tx_1414">&nbsp;</td>
+                    <td style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_1415" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_1415" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+                    </td>
+
+
+                </tr>
+                </tr>
+                    <tr class="table3">
+                    <td id="move_shlef_tx_152">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_153" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_153" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+                    </td>
+                    <td id="move_shlef_tx_155">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_156" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_156" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+                    </td>
+                    <td id="move_shlef_tx_158">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_159" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_159" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+
+                    </td>
+                    <td id="move_shlef_tx_1511">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_1512" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_1512" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+
+                    </td>
+                    <td id="move_shlef_tx_1514">&nbsp;</td>
+                    <td style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_1515" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_1515" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+                    </td>
+
+
+                </tr>
+                </tr>
+                    <tr class="table3">
+                    <td id="move_shlef_tx_162">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_163" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_163" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+                    </td>
+                    <td id="move_shlef_tx_165">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_166" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_166" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+                    </td>
+                    <td id="move_shlef_tx_168">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_169" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_169" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+
+                    </td>
+                    <td id="move_shlef_tx_1611">&nbsp;</td>
+                    <td class="  " style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_1612" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_1612" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+
+                    </td>
+                    <td id="move_shlef_tx_1614">&nbsp;</td>
+                    <td style="position:relative">
+                        <div class="progress" style="width: 100%;height: 100%;margin-top: 20px">
+                            <div id="move_shlef_tx_color_1615" class="progress-bar progress-bar-danger green" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 0%;margin-left: 0px;">
+                            </div>
+                            <div class="table4">
+                            <p id="move_shlef_tx_1615" style="text-align:center">&nbsp;</p>
+                        </div>
+                        </div>
+                    </td>
+                </tr>-->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+       var tx_data = {
+            dqr:[],
+            dzkcl:[],
+            thdcl:[],
+            dhq:[],
+            yhq:[],
+            ddcl:[],
+            yhq_15:[],
+            ddcl_30:[],
+            ht:[],
+            dqr_color:[],
+            dzkcl_color:[],
+            thdcl_color:[],
+            dhq_color:[],
+            yhq_color:[],
+            ddcl_color:[]
+        }
+        $(document).ready(function () {
+            //getData();
+            //console.log(app_ck.tx);
+        });
+        function getData() {
+            $.ajax({
+                url: '/test4',
+                data: {},
+                type: 'POST',
+                async: false,
+                dataType: 'json',
+                success: function (data) {
+                    tx_data.dqr = data.tx_dqr_num1
+                    tx_data.dzkcl = data.tx_dzkcl_num1
+                    tx_data.thdcl = data.tx_thdcl_num1
+                    tx_data.dhq = data.tx_dhq_num1
+                    tx_data.yhq = data.tx_yhq_num1
+                    tx_data.ddcl = data.tx_ddcl_num1
+                    tx_data.yhq_15 =data.tx_yhq_15
+                    tx_data.ddcl_30 = data.tx_ddcl_30
+                    tx_data.ht = data.tx_ht_num1
+                    tx_data.dqr_color = data.tx_dqr_color
+                    tx_data.dzkcl_color = data.tx_dzkcl_color
+                    tx_data.thdcl_color = data.tx_thdcl_color
+                    tx_data.dhq_color = data.tx_dhq_color
+                    tx_data.yhq_color = data.tx_yhq_color
+                    tx_data.ddcl_color = data.tx_ddcl_color
+                }
+            });
+        }
+        function TX_DQR_data() {
+            document.getElementById('move_shlef_tx_011').innerHTML = tx_data.dqr[0]
+            document.getElementById('move_shlef_tx_012').innerHTML = tx_data.dqr[1]
+            document.getElementById('move_shlef_tx_013').innerHTML = tx_data.dqr[2]
+            document.getElementById('move_shlef_tx_014').innerHTML = tx_data.dqr[3]
+            document.getElementById('move_shlef_tx_015').innerHTML = tx_data.dqr[4]
+            document.getElementById('move_shlef_tx_016').innerHTML = tx_data.dqr[5]
+            document.getElementById('move_shlef_tx_017').innerHTML = tx_data.dqr[6]
+            document.getElementById('move_shlef_tx_018').innerHTML = tx_data.dqr[7]
+            document.getElementById('move_shlef_tx_019').innerHTML = tx_data.dqr[8]
+            document.getElementById('move_shlef_tx_0110').innerHTML = tx_data.dqr[9]
+        }
+        function TX_DZKCL_data() {
+            document.getElementById('move_shlef_tx_021').innerHTML = tx_data.dzkcl[0]
+            document.getElementById('move_shlef_tx_022').innerHTML = tx_data.dzkcl[1]
+            document.getElementById('move_shlef_tx_023').innerHTML = tx_data.dzkcl[2]
+            document.getElementById('move_shlef_tx_024').innerHTML = tx_data.dzkcl[3]
+            document.getElementById('move_shlef_tx_025').innerHTML = tx_data.dzkcl[4]
+            document.getElementById('move_shlef_tx_026').innerHTML = tx_data.dzkcl[5]
+            document.getElementById('move_shlef_tx_027').innerHTML = tx_data.dzkcl[6]
+            document.getElementById('move_shlef_tx_028').innerHTML = tx_data.dzkcl[7]
+            document.getElementById('move_shlef_tx_029').innerHTML = tx_data.dzkcl[8]
+            document.getElementById('move_shlef_tx_0210').innerHTML = tx_data.dzkcl[9]
+        }
+        function TX_THDCL_data() {
+            document.getElementById('move_shlef_tx_031').innerHTML = tx_data.thdcl[0]
+            document.getElementById('move_shlef_tx_032').innerHTML = tx_data.thdcl[1]
+            document.getElementById('move_shlef_tx_033').innerHTML = tx_data.thdcl[2]
+            document.getElementById('move_shlef_tx_034').innerHTML = tx_data.thdcl[3]
+            document.getElementById('move_shlef_tx_035').innerHTML = tx_data.thdcl[4]
+            document.getElementById('move_shlef_tx_036').innerHTML = tx_data.thdcl[5]
+        }
+        function TX_DHQ_data() {
+            document.getElementById('move_shlef_tx_041').innerHTML = tx_data.dhq[0]
+            document.getElementById('move_shlef_tx_042').innerHTML = tx_data.dhq[1]
+            document.getElementById('move_shlef_tx_043').innerHTML = tx_data.dhq[2]
+            document.getElementById('move_shlef_tx_044').innerHTML = tx_data.dhq[3]
+            document.getElementById('move_shlef_tx_045').innerHTML = tx_data.dhq[4]
+        }
+        function TX_YHQ_data() {
+            document.getElementById('move_shlef_tx_051').innerHTML = tx_data.yhq[0]
+            document.getElementById('move_shlef_tx_052').innerHTML = tx_data.yhq[1]
+            document.getElementById('move_shlef_tx_053').innerHTML = tx_data.yhq[2]
+            document.getElementById('move_shlef_tx_054').innerHTML = tx_data.yhq[3]
+            document.getElementById('move_shlef_tx_055').innerHTML = tx_data.yhq[4]        }
+        function TX_DDCL_data() {
+            document.getElementById('move_shlef_tx_061').innerHTML = tx_data.ddcl[0]
+            document.getElementById('move_shlef_tx_062').innerHTML = tx_data.ddcl[1]
+            document.getElementById('move_shlef_tx_063').innerHTML = tx_data.ddcl[2]
+            document.getElementById('move_shlef_tx_064').innerHTML = tx_data.ddcl[3]
+            document.getElementById('move_shlef_tx_065').innerHTML = tx_data.ddcl[4]        }
+        function TX_YHQ15_data() {
+            document.getElementById('move_shlef_tx_071').innerHTML = tx_data.yhq_15[0]
+            document.getElementById('move_shlef_tx_081').innerHTML = tx_data.ddcl_30[0]
+            document.getElementById('move_shlef_tx_091').innerHTML = tx_data.ht[0]
+
+        }
+        function TX_COLOR_DATA() {
+            document.getElementById('move_shlef_tx_color_011').style.width = tx_data.dqr_color[0]
+            document.getElementById('move_shlef_tx_color_012').style.width = tx_data.dqr_color[1]
+            document.getElementById('move_shlef_tx_color_013').style.width = tx_data.dqr_color[2]
+            document.getElementById('move_shlef_tx_color_014').style.width = tx_data.dqr_color[3]
+            document.getElementById('move_shlef_tx_color_015').style.width = tx_data.dqr_color[4]
+            document.getElementById('move_shlef_tx_color_016').style.width = tx_data.dqr_color[5]
+            document.getElementById('move_shlef_tx_color_017').style.width = tx_data.dqr_color[6]
+            document.getElementById('move_shlef_tx_color_018').style.width = tx_data.dqr_color[7]
+            document.getElementById('move_shlef_tx_color_019').style.width = tx_data.dqr_color[8]
+
+            document.getElementById('move_shlef_tx_color_021').style.width = tx_data.dzkcl_color[0]
+            document.getElementById('move_shlef_tx_color_022').style.width = tx_data.dzkcl_color[1]
+            document.getElementById('move_shlef_tx_color_023').style.width = tx_data.dzkcl_color[2]
+            document.getElementById('move_shlef_tx_color_024').style.width = tx_data.dzkcl_color[3]
+            document.getElementById('move_shlef_tx_color_025').style.width = tx_data.dzkcl_color[4]
+            document.getElementById('move_shlef_tx_color_026').style.width = tx_data.dzkcl_color[5]
+            document.getElementById('move_shlef_tx_color_027').style.width = tx_data.dzkcl_color[6]
+            document.getElementById('move_shlef_tx_color_028').style.width = tx_data.dzkcl_color[7]
+            document.getElementById('move_shlef_tx_color_029').style.width = tx_data.dzkcl_color[8]
+
+            document.getElementById('move_shlef_tx_color_031').style.width = tx_data.thdcl_color[0]
+            document.getElementById('move_shlef_tx_color_032').style.width = tx_data.thdcl_color[1]
+            document.getElementById('move_shlef_tx_color_033').style.width = tx_data.thdcl_color[2]
+            document.getElementById('move_shlef_tx_color_034').style.width = tx_data.thdcl_color[3]
+            document.getElementById('move_shlef_tx_color_035').style.width = tx_data.thdcl_color[4]
+
+            document.getElementById('move_shlef_tx_color_041').style.width = tx_data.dhq_color[0]
+            document.getElementById('move_shlef_tx_color_042').style.width = tx_data.dhq_color[1]
+            document.getElementById('move_shlef_tx_color_043').style.width = tx_data.dhq_color[2]
+            document.getElementById('move_shlef_tx_color_044').style.width = tx_data.dhq_color[3]
+
+            document.getElementById('move_shlef_tx_color_051').style.width = tx_data.yhq_color[0]
+            document.getElementById('move_shlef_tx_color_052').style.width = tx_data.yhq_color[1]
+            document.getElementById('move_shlef_tx_color_053').style.width = tx_data.yhq_color[2]
+            document.getElementById('move_shlef_tx_color_054').style.width = tx_data.yhq_color[3]
+
+            document.getElementById('move_shlef_tx_color_061').style.width = tx_data.ddcl_color[0]
+            document.getElementById('move_shlef_tx_color_062').style.width = tx_data.ddcl_color[1]
+            document.getElementById('move_shlef_tx_color_063').style.width = tx_data.ddcl_color[2]
+            document.getElementById('move_shlef_tx_color_064').style.width = tx_data.ddcl_color[3]
+        }
+       function getDC() {
+        $.ajax({
+            url: '/button_rk_normal',
+            type: 'POST',
+            async: false,
+            cache: true,
+            success: function () {
+                alert("导出成功")
+            },
+            error:function () {
+                alert("导出成功,在C盘根目录")
+            }
+        });
+    }
+        getData();
+        TX_DQR_data();
+        TX_DZKCL_data();
+        TX_THDCL_data();
+        TX_DHQ_data();
+        TX_YHQ_data();
+        TX_DDCL_data();
+        TX_YHQ15_data();
+        TX_COLOR_DATA();
+
+    </script>
+</body>
+</html>

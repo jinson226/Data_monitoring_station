@@ -1,0 +1,3754 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+{#    <meta http-equiv="refresh" content="300">#}
+    <title>Title</title>
+    <!--<meta http-equiv="refresh" content="300">-->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- 引入jquery.js -->
+    <script src="https://cdn.bootcss.com/echarts/4.1.0.rc2/echarts.min.js"></script>
+    <script src="static/echarts-liquidfill.js"></script>
+
+    <style>
+        html,body{
+            height: 100%;
+        }
+        body{
+            margin: 0;
+        }
+        table,table tr th, table tr td {text-align: center;font-weight: bold;
+             font-size: 18px;height: 40px}
+        .table-radius{
+            border-radius: 10px 10px 10px 10px;
+        }
+    </style>
+</head>
+<body style="background-color: rgba(215,233,245,0.1);height: 100%">
+<head>
+    <meta charset="utf-8">
+</head>
+
+
+
+
+<div class="div1" style="border: 1px solid #000000">
+    <nav class="navbar navbar-inverse" style="margin-bottom: 0px">
+  <div style="background-color: rgb(166,230,225);" class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="title1" href="#">仓储中心数据网站</a>
+    </div>
+    <div style="background-color: rgb(166,230,225);color: rgb(0,0,0)" class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active1"><a href="#" class="text1">主页</a></li>
+          <li><a href="{{url_for('rk_hm')}}" class="text">虎门入库监控</a></li>
+          <li><a href="{{url_for('rk_tx')}}" class="text">塘厦入库监控</a></li>
+          <li><a href="{{url_for('mv_hm')}}" class="text">虎门移动数据</a></li>
+          <li><a href="{{url_for('mv_tx')}}" class="text">塘厦移动数据</a></li>
+          
+          <li><a href="{{url_for('rk_hm_abnormal')}}" class="text">虎门入库异常</a></li>
+          <li><a href="{{url_for('rk_tx_abnormal')}}" class="text">塘厦入库异常</a></li>
+          <li><a href="{{url_for('hm_diaobo')}}" class="text">虎门调拨监控</a></li>
+          <li><a href="{{url_for('tx_diaobo')}}" class="text">塘厦调拨监控</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+    <div style="width:100%;height:94%;display:flex;border: 1px solid #000000;">
+        <div style="width: 24%;height: 100%;border: 1px solid #000">
+            <div class = "index_title" id="ry_time" style="width: 100%;height: 5%;border: 1px solid #000;">人员数据</div>
+            <div style="width: 100%;height: 45%;border: 1px solid #000;position: relative">
+                <table class="table-radius" style=" #border-collapse:separate;width:33%;height: 5%;#border: 3px solid #000; font-size:35px;position: absolute;margin-left:0%;margin-top: 1%;text-align: center;">
+                        <tbody>
+                        <tr style="">
+                            <td style="font-size: 20px;#border-bottom: 1px solid #000">人员情况</td>
+                        </tr>
+                        </tbody>
+                </table>
+                
+                <table class="table-radius" style=" #border-collapse:separate;width:33%;height: 5%;#border: 3px solid #000; font-size:35px;position: absolute;margin-left:33%;margin-top: 1%;text-align: center;">
+                        <tbody>
+                        <tr style="">
+                            <td style="font-size: 20px;#border-bottom: 1px solid #000">虎门仓</td>
+                        </tr>
+                        </tbody>
+                </table>
+                <table class="table-radius" style=" #border-collapse:separate;width:33%;height: 5%;#border: 3px solid #000; font-size:35px;position: absolute;margin-left:66%;margin-top: 1%;text-align: center;">
+                        <tbody>
+                        <tr style="">
+                            <td style="font-size: 20px;#border-bottom: 1px solid #000">塘厦仓</td>
+                        </tr>
+                        </tbody>
+                </table>
+
+                <table class="table-radius" style=" border-collapse:collapse;width:100%;height: 5%;#border-left: 3px solid #C23531; font-size:35px;position: absolute;margin-left:0%;margin-top: 10%;text-align: center;">
+                        <tbody>
+                        <tr style="#border-bottom:3px solid #000 ">
+                            <td style="font-size:20px;width:33%;">编制人数</td>
+                            <td id="" class="RY" style="width:33%;border-left: 3px solid #C23531">
+                                <div style="width: 100%;height: 100%;position: relative">
+                                    <p id="RY_011" class="RY" style="position: absolute;margin-left: 40%;line-height: 200%;"></p>
+                                    <p id="RY_013" class="RY2" style="position: absolute;margin-left: 70%;line-height: 300%;"></p>
+                                </div>
+                            </td>
+                            <td class="RY" style="width:33%;border-left: 3px solid #2F4554">
+                                <div style="width: 100%;height: 100%;position: relative">
+                                    <p id="RY_012" class="RY" style="position: absolute;margin-left: 40%;line-height: 200%;"></p>
+                                    <p id="RY_014" class="RY2" style="position: absolute;margin-left: 70%;line-height: 300%;"></p>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                </table>
+
+                <table class="table-radius" style=" border-collapse:collapse;width:100%;height: 5%;#border-left: 3px solid #C23531; font-size:35px;position: absolute;margin-left:0%;margin-top: 19%;text-align: center;">
+                        <tbody>
+                        <tr style="#border-bottom:3px solid #000 ">
+                            <td style="font-size:20px;width:33%;">中转仓人数</td>
+                            <td class="RY" style="width:33%;border-left: 3px solid #C23531">
+                                <div style="width: 100%;height: 100%;position: relative">
+                                    <p id="RY_021" class="RY" style="position: absolute;margin-left: 40%;line-height: 200%;"></p>
+                                    <p id="RY_023" class="RY2" style="position: absolute;margin-left: 70%;line-height: 300%;"></p>
+                                </div>
+                            </td>
+                            <td class="RY" style="width:33%;border-left: 3px solid #2F4554">
+                                <div style="width: 100%;height: 100%;position: relative">
+                                    <p id="RY_022" class="RY" style="position: absolute;margin-left: 40%;line-height: 200%;"></p>
+                                    <p id="RY_024" class="RY2" style="position: absolute;margin-left: 70%;line-height: 300%;"></p>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                </table>
+
+                <table class="table-radius" style=" border-collapse:collapse;width:100%;height: 5%;#border-left: 3px solid #C23531; font-size:35px;position: absolute;margin-left:0%;margin-top: 28%;text-align: center;">
+                        <tbody>
+                        <tr style="#border-bottom:3px solid #000 ">
+                            <td style="font-size:20px;width:33%;">出勤人数(含中转)</td>
+                            <td class="RY" style="width:33%;border-left: 3px solid #C23531">
+                                <div style="width: 100%;height: 100%;position: relative">
+                                    <p id="RY_031" class="RY" style="position: absolute;margin-left: 40%;line-height: 200%;"></p>
+                                    <p id="RY_033" class="RY2" style="position: absolute;margin-left: 70%;line-height: 300%;"></p>
+                                </div>
+                            </td>
+                            <td class="RY" style="width:33%;border-left: 3px solid #2F4554">
+                                <div style="width: 100%;height: 100%;position: relative">
+                                    <p id="RY_032" class="RY" style="position: absolute;margin-left: 40%;line-height: 200%;"></p>
+                                    <p id="RY_034" class="RY2" style="position: absolute;margin-left: 70%;line-height: 300%;"></p>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                </table>
+
+                <table class="table-radius" style=" border-collapse:collapse;width:100%;height: 5%;#border-left: 3px solid #C23531; font-size:35px;position: absolute;margin-left:0%;margin-top: 37%;text-align: center;">
+                        <tbody>
+                        <tr style="#border-bottom:3px solid #000 ">
+                            <td style="font-size:20px;width:33%;">临时工人数</td>
+                            <td class="RY" style="width:33%;border-left: 3px solid #C23531">
+                                <div style="width: 100%;height: 100%;position: relative">
+                                    <p id="RY_041" class="RY" style="position: absolute;margin-left: 40%;line-height: 200%;"></p>
+                                    <p id="RY_043" class="RY2" style="position: absolute;margin-left: 70%;line-height: 300%;"></p>
+                                </div>
+                            </td>
+                            <td class="RY" style="width:33%;border-left: 3px solid #2F4554">
+                                <div style="width: 100%;height: 100%;position: relative">
+                                    <p id="RY_042" class="RY" style="position: absolute;margin-left: 40%;line-height: 200%;"></p>
+                                    <p id="RY_044" class="RY2" style="position: absolute;margin-left: 70%;line-height: 300%;"></p>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                </table>
+
+                <table class="table-radius" style=" border-collapse:collapse;width:100%;height: 5%;#border-left: 3px solid #C23531; font-size:35px;position: absolute;margin-left:0%;margin-top: 46%;text-align: center;">
+                        <tbody>
+                        <tr style="#border-bottom:3px solid #000 ">
+                            <td style="font-size:20px;width:33%;">临时工工时</td>
+                            <td class="RY" style="width:33%;border-left: 3px solid #C23531">
+                                <div style="width: 100%;height: 100%;position: relative">
+                                    <p id="RY_051" class="RY" style="position: absolute;margin-left: 35%;line-height: 200%;"></p>
+                                    <p id="RY_053" class="RY2" style="position: absolute;margin-left: 70%;line-height: 300%;"></p>
+                                </div>
+                            </td>
+                            <td class="RY" style="width:33%;border-left: 3px solid #2F4554">
+                                <div style="width: 100%;height: 100%;position: relative">
+                                    <p id="RY_052" class="RY" style="position: absolute;margin-left: 35%;line-height: 200%;"></p>
+                                    <p id="RY_054" class="RY2" style="position: absolute;margin-left: 70%;line-height: 300%;"></p>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                </table>
+
+                        <table class="table-radius" style=" border-collapse:collapse;width:100%;height: 5%;#border-left: 3px solid #C23531; font-size:35px;position: absolute;margin-left:0%;margin-top: 55%;text-align: center;">
+                        <tbody>
+                        <tr style="#border-bottom:3px solid #000 ">
+                            <td style="font-size:20px;width:33%;">正式工工时</td>
+                            <td class="RY" style="width:33%;border-left: 3px solid #C23531">
+                                <div style="width: 100%;height: 100%;position: relative">
+                                    <p id="RY_061" class="RY" style="position: absolute;margin-left: 30%;line-height: 200%;"></p>
+                                    <p id="RY_063" class="RY2" style="position: absolute;margin-left: 70%;line-height: 300%;"></p>
+                                </div>
+                            </td>
+                            <td class="RY" style="width:33%;border-left: 3px solid #2F4554">
+                                <div style="width: 100%;height: 100%;position: relative">
+                                    <p id="RY_062" class="RY" style="position: absolute;margin-left: 30%;line-height: 200%;"></p>
+                                    <p id="RY_064" class="RY2" style="position: absolute;margin-left: 70%;line-height: 300%;"></p>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                </table>
+
+                <table class="table-radius" style=" border-collapse:collapse;width:100%;height: 5%;#border-left: 3px solid #C23531; font-size:35px;position: absolute;margin-left:0%;margin-top: 64%;text-align: center;">
+                        <tbody>
+                        <tr style="#border-bottom:3px solid #000 ">
+                            <td style="font-size:20px;width:33%;">平均工时</td>
+                            <td class="RY" style="width:33%;border-left: 3px solid #C23531">
+                                <div style="width: 100%;height: 100%;position: relative">
+                                    <p id="RY_071" class="RY" style="position: absolute;margin-left: 35%;line-height: 200%;"></p>
+                                    <p id="RY_073" class="RY2" style="position: absolute;margin-left: 70%;line-height: 300%;"></p>
+                                </div>
+                            </td>
+                            <td class="RY" style="width:33%;border-left: 3px solid #2F4554">
+                                <div style="width: 100%;height: 100%;position: relative">
+                                    <p id="RY_072" class="RY" style="position: absolute;margin-left: 35%;line-height: 200%;"></p>
+                                    <p id="RY_074" class="RY2" style="position: absolute;margin-left: 70%;line-height: 300%;"></p>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                </table>
+
+                <table class="table-radius" style=" border-collapse:collapse;width:100%;height: 5%;#border-left: 3px solid #C23531; font-size:35px;position: absolute;margin-left:0%;margin-top: 73%;text-align: center;">
+                        <tbody>
+                        <tr style="#border-bottom:3px solid #000 ">
+                            <td style="font-size:20px;width:33%;">入职人数(周)</td>
+                            <td class="RY" style="width:33%;border-left: 3px solid #C23531">
+                                <div style="width: 100%;height: 100%;position: relative">
+                                    <p id="RY_081" class="RY" style="position: absolute;margin-left: 45%;line-height: 200%;"></p>
+                                    <p id="RY_083" class="RY2" style="position: absolute;margin-left: 70%;line-height: 300%;"></p>
+                                </div>
+                            </td>
+                            <td class="RY" style="width:33%;border-left: 3px solid #2F4554">
+                                <div style="width: 100%;height: 100%;position: relative">
+                                    <p id="RY_082" class="RY" style="position: absolute;margin-left: 45%;line-height: 200%;"></p>
+                                    <p id="RY_084" class="RY2" style="position: absolute;margin-left: 70%;line-height: 300%;"></p>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                </table>
+
+                <table class="table-radius" style=" border-collapse:collapse;width:100%;height: 5%;#border-left: 3px solid #C23531; font-size:35px;position: absolute;margin-left:0%;margin-top: 82%;text-align: center;">
+                        <tbody>
+                        <tr style="#border-bottom:3px solid #000 ">
+                            <td style="font-size:20px;width:33%;">离职人数(周)</td>
+                            <td class="RY" style="width:33%;border-left: 3px solid #C23531">
+                                <div style="width: 100%;height: 100%;position: relative">
+                                    <p id="RY_091" class="RY" style="position: absolute;margin-left: 45%;line-height: 200%;"></p>
+                                    <p id="RY_093" class="RY2" style="position: absolute;margin-left: 70%;line-height: 300%;"></p>
+                                </div>
+                            </td>
+                            <td class="RY" style="width:33%;border-left: 3px solid #2F4554">
+                                <div style="width: 100%;height: 100%;position: relative">
+                                    <p id="RY_092" class="RY" style="position: absolute;margin-left: 45%;line-height: 200%;"></p>
+                                    <p id="RY_094" class="RY2" style="position: absolute;margin-left: 70%;line-height: 300%;"></p>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                </table>
+
+
+
+
+
+{#                        <tr style="position:relative">#}
+{#                            <td id="RY_011" class="RY" style="width:30%;border-left: 3px solid #C23531;">0</td>#}
+{#                            <td id="RY_012" class="RY" style="width:40%;border-left: 3px solid #000;border-right: 3px solid #000;">2</td>#}
+{#                            <td id="RY_013" class="RY" style="width:30%;">0</td>#}
+{#                        </tr>#}
+{#                                        <tr style="position:relative">#}
+{#                            <td id="RY_021" class="RY" style="width:30%;border-left: 3px solid #C23531;">0</td>#}
+{#                            <td id="RY_022" class="RY" style="width:40%;border-left: 3px solid #000;border-right: 3px solid #000;">2</td>#}
+{#                            <td id="RY_023" class="RY" style="width:30%;">0</td>#}
+{#                        </tr>#}
+
+
+{#                <table class="table-radius" style=" border-collapse:collapse;width:42.5%;height: 5%;#border-left: 3px solid #C23531; font-size:35px;position: absolute;margin-left:57.5%;margin-top: 1%;text-align: center;">#}
+{#                        <tbody>#}
+{#                        <tr style="#border-bottom:3px solid #000 ">#}
+{#                            <td class="RY" style="width:30%;">&nbsp;</td>#}
+{#                            <td style="font-size:20px;width:40%;">出勤人数</td>#}
+{#                            <td class="RY" style="width:30%;">&nbsp;</td>#}
+{##}
+{#                        </tr>#}
+{#                        <tr style="position:relative">#}
+{#                            <td id="RY_014" class="RY" style="width:33%;border-left: 3px solid #C23531;">0</td>#}
+{#                            <td id="RY_015" class="RY" style="width:33%;border-left: 3px solid #000;border-right: 3px solid #000;">2</td>#}
+{#                            <td id="RY_016" class="RY" style="width:33%;">0</td>#}
+{#                        </tr>#}
+{#                        <tr style="position:relative">#}
+{#                            <td id="RY_024" class="RY" style="width:33%;border-left: 3px solid #C23531;">0</td>#}
+{#                            <td id="RY_025" class="RY" style="width:33%;border-left: 3px solid #000;border-right: 3px solid #000;">2</td>#}
+{#                            <td id="RY_026" class="RY" style="width:33%;">0</td>#}
+{#                        </tr>#}
+{#                        </tbody>#}
+{#                </table>#}
+{##}
+
+{#                <table class="table-radius" style="border-collapse: separate;width:30%;height: 20%;border: 3px solid #000; font-size:35px;position: absolute;margin-left:34%;margin-top: 3%;text-align: center;">#}
+{#                        <tbody>#}
+{#                        <tr style="">#}
+{#                            <td  style="font-size: 20px;font-size: 20px;border-bottom: 1px solid #000">虎门出库件数</td>#}
+{#                        </tr>#}
+{#                        <tr style="">#}
+{#                            <td id="hm_rk_out" style="font-size: 22px;font-size: 20px;border-bottom: 1px solid #000">500000</td>#}
+{#                        </tr>#}
+{#                        </tbody>#}
+{#                    </table>#}
+{#                <table class="table-radius" style="border-collapse: separate;width:30%;height: 20%;border: 3px solid #000; font-size:35px;position: absolute;margin-left:66%;margin-top: 3%;text-align: center;">#}
+{#                        <tbody>#}
+{#                        <tr style="">#}
+{#                            <td style="font-size: 20px;font-size: 20px;border-bottom: 1px solid #000">虎门拉单量</td>#}
+{#                        </tr>#}
+{#                        <tr style="">#}
+{#                            <td id= "hm_rk_ld"  style="font-size: 22px;font-size: 20px;border-bottom: 1px solid #000">500000</td>#}
+{#                        </tr>#}
+{#                        </tbody>#}
+{#                    </table>#}
+{##}
+{#                <table class="table-radius" style="border-collapse: separate;width:30%;height: 20%;border: 3px solid #000; font-size:35px;position: absolute;margin-left:2%;margin-top: 23%;text-align: center;">#}
+{#                        <tbody>#}
+{#                        <tr style="">#}
+{#                            <td style="font-size: 20px;font-size: 20px;border-bottom: 1px solid #000">塘厦入库件数</td>#}
+{#                        </tr>#}
+{#                        <tr style="">#}
+{#                            <td id="tx_rk_in" style="font-size: 22px;font-size: 20px;border-bottom: 1px solid #000">500000</td>#}
+{#                        </tr>#}
+{#                        </tbody>#}
+{#                    </table>#}
+{#                <table class="table-radius" style="border-collapse: separate;width:30%;height: 20%;border: 3px solid #000; font-size:35px;position: absolute;margin-left:34%;margin-top: 23%;text-align: center;">#}
+{#                        <tbody>#}
+{#                        <tr style="">#}
+{#                            <td style="font-size: 20px;font-size: 20px;border-bottom: 1px solid #000">塘厦出库件数</td>#}
+{#                        </tr>#}
+{#                        <tr style="">#}
+{#                            <td id="tx_rk_out" style="font-size: 22px;font-size: 20px;border-bottom: 1px solid #000">500000</td>#}
+{#                        </tr>#}
+{#                        </tbody>#}
+{#                    </table>#}
+{#                <table class="table-radius" style="border-collapse: separate;width:30%;height: 20%;border: 3px solid #000; font-size:35px;position: absolute;margin-left:66%;margin-top: 23%;text-align: center;">#}
+{#                        <tbody>#}
+{#                        <tr style="">#}
+{#                            <td style="font-size: 20px;font-size: 20px;border-bottom: 1px solid #000">塘厦拉单量</td>#}
+{#                        </tr>#}
+{#                        <tr style="">#}
+{#                            <td  id="tx_rk_ld" style="font-size: 22px;font-size: 20px;border-bottom: 1px solid #000">500000</td>#}
+{#                        </tr>#}
+{#                        </tbody>#}
+{#                    </table>#}
+        </div>
+
+            <div style="width: 100%;height: 5%;border: 1px solid #000;font-size: 30px;color: #000000;font-weight: bold;position:relative;text-align: center">
+                <p id="TPH_time"style="position: relative;text-align: center  ">TPH&UPH</p>
+{#                <button id="btn_hm_time" class="btn btn-success" onclick="btn_hm_time()" style="position: absolute;margin-left: 65%;margin-top: 3px">虎门仓</button>#}
+{#                <button id="btn_tx_time" class="btn btn-primary" onclick="btn_tx_time()" style="position: absolute;margin-left: 83%;margin-top: 3px">塘厦仓</button>#}
+            </div>
+            <div style="width: 100%;height: 45%;border: 1px solid #000;position: relative;">
+                <div id="main_dx" style="position: relative;bottom: 0px;width: 100%;height: 50%;#display: block"></div>
+                <div id="main_dx2" style="position: relative;bottom: 0px;width: 100%;height: 50%;#display: none"></div>
+{#                <button id="btn_hm_tph" class="btn btn-success" onclick="btn_hm_tph()" style="position: absolute;margin-left: 70%;margin-top: 45%">TPH</button>#}
+{#                <button id="btn_tx_tph" class="btn btn-primary" onclick="btn_tx_tph()" style="position: absolute;margin-left: 85%;margin-top: 45%">UPH</button>#}
+
+{#                <div id ="main_sx" style="width: 100%;height: 100%;border: 1px solid #000;position: absolute;display: block"></div>#}
+{#                <div id ="main_sx2" style="width: 100%;height: 100%;border: 1px solid #000;position: absolute;display: none"></div>#}
+            </div>
+        </div>
+
+
+        <div style="width: 52%;margin-left:0.5%;margin-right:0.5%;height: 100%;border: 1px solid #000;position: relative">
+            <div class = "index_title" style="width: 100%;height: 5%;border: 1px solid #000;">仓储中心运营情况</div>
+            <div style="width: 100%;height: 45%;border: 1px solid #000;position: relative">
+{#                <table class="table-radius" style="border-collapse: separate;width:20%;height: 15%;border: 3px solid #000; position: absolute;margin-left:2%;margin-top: 1%;text-align: center;">#}
+{#                        <tbody>#}
+{#                        <tr style="">#}
+{#                            <td style="font-size: 22px;font-size: 20px;border-bottom: 1px solid #000">虎门UPH</td>#}
+{#                        </tr>#}
+{#                        <tr style="">#}
+{#                            <td ID="HM_UPH" style="font-size: 22px;font-size: 20px;border-bottom: 1px solid #000">38.76</td>#}
+{#                        </tr>#}
+{#                        </tbody>#}
+{#                    </table>#}
+{#                <table class="table-radius" style="border-collapse: separate;width:20%;height: 15%;border: 3px solid #000; position: absolute;margin-left:27%;margin-top: 1%;text-align: center;">#}
+{#                        <tbody>#}
+{#                        <tr style="">#}
+{#                            <td style="font-size: 22px;font-size: 20px;border-bottom: 1px solid #000">虎门TPH</td>#}
+{#                        </tr>#}
+{#                        <tr style="">#}
+{#                            <td ID="HM_TPH" style="font-size: 22px;font-size: 20px;border-bottom: 1px solid #000">81.77</td>#}
+{#                        </tr>#}
+{#                        </tbody>#}
+{#                    </table>#}
+{#                <table class="table-radius" style="border-collapse: separate;width:20%;height: 15%;border: 3px solid #000; position: absolute;margin-left:52%;margin-top: 1%;text-align: center;">#}
+{#                        <tbody>#}
+{#                        <tr style="">#}
+{#                            <td style="font-size: 22px;font-size: 20px;border-bottom: 1px solid #000">塘厦UPH</td>#}
+{#                        </tr>#}
+{#                        <tr style="">#}
+{#                            <td ID="TX_UPH"style="font-size: 22px;font-size: 20px;border-bottom: 1px solid #000">38.52</td>#}
+{#                        </tr>#}
+{#                        </tbody>#}
+{#                    </table>#}
+{#                <table class="table-radius" style="border-collapse: separate;width:20%;height: 15%;border: 3px solid #000; position: absolute;margin-left:77%;margin-top: 1%;text-align: center;">#}
+{#                        <tbody>#}
+{#                        <tr style="">#}
+{#                            <td style="font-size: 22px;font-size: 20px;border-bottom: 1px solid #000">塘厦TPH</td>#}
+{#                        </tr>#}
+{#                        <tr style="">#}
+{#                            <td ID="TX_TPH" style="font-size: 22px;font-size: 20px;border-bottom: 1px solid #000">79.93</td>#}
+{#                        </tr>#}
+{#                        </tbody>#}
+{#                    </table>#}
+{#                <div id="main_hp_hm" style="width: 50%;height: 80%;bottom:0px;position: absolute;"></div>#}
+{#                <div id="main_hp_tx" style="width: 50%;height: 80%;bottom:0px;margin-left:50%;position: absolute;"></div>#}
+             <div id="main_yy" style="position: absolute;bottom: 0px;width: 100%;height: 100%;#display: block;"></div>
+{#                <div id="main_yy2" style="position: absolute;bottom: 0px;margin-left: 50%;width: 50%;height: 100%;#display: block"></div>#}
+
+
+
+
+            </div>
+
+
+            <div style="width: 100%;height: 5%">
+            <div id="title_time" class = "index_title" style="width: 100%;height: 5%;border: 1px solid #000;">实时业务积压监控</div>
+{#                <div  class = "index_title2" style="position:absolute;margin-left:80%;width: 20%;height: 5%;" id="times">#}
+{#    </div>#}
+         </div>
+
+            <div  style="width: 100%;height: 44%;background: #FFF;position: absolute">
+            <table style="border: 1px solid #000;width: 100%;bottom: 2px;position: absolute">
+                <thead style="border: 1px solid #000">
+                <tr class="table3">
+                <th colspan="3" style="width:100px;border: 1px solid #000">小包业务积压情况</th>
+                <th colspan="3" style="width:100px;border: 1px solid #000">FBA业务积压情况(件数)</th>
+                <th colspan="3" style="width:100px;border: 1px solid #000">调拨业务积压情况(单数)</th>
+                </tr>
+                <tr class="table3">
+                <th class="retention"style="width:100px;border: 1px solid #000">业务</th>
+                <th class="retention"style="width:100px;border: 1px solid #000">虎门仓</th>
+                <th class="retention"style="width:100px;border: 1px solid #000">塘厦仓</th>
+                <th class="retention"style="width:100px;border: 1px solid #000">业务</th>
+                <th class="retention"style="width:100px;border: 1px solid #000">虎门仓</th>
+                <th class="retention"style="width:100px;border: 1px solid #000">塘厦仓</th>
+                <th class="retention"style="width:100px;border: 1px solid #000">业务</th>
+                <th class="retention"style="width:100px;border: 1px solid #000">虎门仓</th>
+                <th class="retention"style="width:100px;border: 1px solid #000">塘厦仓</th>
+                </tr>
+                </tr>
+                <tr class="table3">
+                <th class="retention"style="width:100px;border: 1px solid #000">待入库(箱)</th>
+                <th class=" " style="border: 1px solid #000">
+                    <div class="retention"style="position:relative;width: 100%;height: 100%;">
+                        <div id="color_011" class="progress-bar progress-bar-danger green3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;height:100%;position:relative;">
+                        </div>
+                        <div class="table4" style="height:50%;">
+                        <p id="data_011" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_012" class="progress-bar progress-bar-danger red3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_012" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <th class="retention"style="width:100px;border: 1px solid #000">待配库</th>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_013" class="progress-bar progress-bar-danger green3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_013" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_014" class="progress-bar progress-bar-danger red3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_014" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <th class="retention"style="width:100px;border: 1px solid #000">待入库</th>
+
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_015" class="progress-bar progress-bar-danger green3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_015" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_016" class="progress-bar progress-bar-danger red3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_016" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </th>
+                </tr>
+               <tr class="table3">
+                <th class="retention"style="width:100px;border: 1px solid #000">待质检(件)</th>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_021" class="progress-bar progress-bar-danger green3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_021" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_022" class="progress-bar progress-bar-danger red3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_022" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <th class="retention"style="width:100px;border: 1px solid #000">待分配拉单</th>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_023" class="progress-bar progress-bar-danger green3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_023" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_024" class="progress-bar progress-bar-danger red3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_024" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <th class="retention"style="width:100px;border: 1px solid #000">入库中</th>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_025" class="progress-bar progress-bar-danger green3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_025" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_026" class="progress-bar progress-bar-danger red3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_026" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                </tr>
+                <tr class="table3">
+                <th class="retention"style="width:100px;border: 1px solid #000">待贴码(件)</th>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_031" class="progress-bar progress-bar-danger green3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_031" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_032" class="progress-bar progress-bar-danger red3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_032" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <th class="retention"style="width:100px;border: 1px solid #000">待拉单</th>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_033" class="progress-bar progress-bar-danger green3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_033" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_034" class="progress-bar progress-bar-danger red3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_034" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <th class="retention"style="width:100px;border: 1px solid #000">待拉单</th>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_035" class="progress-bar progress-bar-danger green3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_035" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_036" class="progress-bar progress-bar-danger red3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_036" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                </tr>
+                <tr class="table3">
+                <th class="retention"style="width:100px;border: 1px solid #000">待上架(件)</th>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_041" class="progress-bar progress-bar-danger green3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_041" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_042" class="progress-bar progress-bar-danger red3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_042" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <th class="retention"style="width:100px;border: 1px solid #000">待拣货</th>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_043" class="progress-bar progress-bar-danger green3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_043" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_044" class="progress-bar progress-bar-danger red3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_044" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <th class="retention"style="width:100px;border: 1px solid #000">待拣货</th>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_045" class="progress-bar progress-bar-danger green3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_045" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_046" class="progress-bar progress-bar-danger red3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_046" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                </tr>
+                <tr class="table3">
+                <th class="retention"style="width:100px;border: 1px solid #000">待配库(单)</th>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_051" class="progress-bar progress-bar-danger green3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_051" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_052" class="progress-bar progress-bar-danger red3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_052" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <th class="retention"style="width:100px;border: 1px solid #000">拣货中</th>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_053" class="progress-bar progress-bar-danger green3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_053" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_054" class="progress-bar progress-bar-danger red3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_054" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <th class="retention"style="width:100px;border: 1px solid #000">待打包</th>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_055" class="progress-bar progress-bar-danger green3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_055" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_056" class="progress-bar progress-bar-danger red3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_056" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                </tr>
+                <tr class="table3">
+                <th class="retention"style="width:100px;border: 1px solid #000">待拉单(单)</th>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_061" class="progress-bar progress-bar-danger green3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_061" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_062" class="progress-bar progress-bar-danger red3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_062" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <th class="retention"style="width:100px;border: 1px solid #000">待打包</th>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_063" class="progress-bar progress-bar-danger green3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_063" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_064" class="progress-bar progress-bar-danger red3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_064" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <th class="retention"style="width:100px;border: 1px solid #000">待出库</th>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_065" class="progress-bar progress-bar-danger green3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_065" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_066" class="progress-bar progress-bar-danger red3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_066" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                </tr>
+                <tr class="table3">
+                <th class="retention"style="width:100px;border: 1px solid #000">待拣货(单)</th>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_071" class="progress-bar progress-bar-danger green3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_071" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_072" class="progress-bar progress-bar-danger red3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_072" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <th class="retention"style="width:100px;border: 1px solid #000">待出库</th>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_073" class="progress-bar progress-bar-danger green3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_073" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_074" class="progress-bar progress-bar-danger red3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_074" style="text-align:center;margin-top:5%;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <th class="retention"style="width:100px;border: 1px solid #000">&nbsp;</th>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_075" class="progress-bar progress-bar-danger green3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_075" style="text-align:center;margin-top:5%">&nbsp;</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_076" class="progress-bar progress-bar-danger red3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_076" style="text-align:center;margin-top:5%">&nbsp;</p>
+                    </div>
+                    </div>
+                </td>
+                </tr>
+                <tr class="table3">
+                <th class="retention"style="width:100px;border: 1px solid #000">待打包(单)</th>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_081" class="progress-bar progress-bar-danger green3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_081" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_082" class="progress-bar progress-bar-danger red3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_082" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <th class="retention"style="width:100px;border: 1px solid #000">待交运</th>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_083" class="progress-bar progress-bar-danger green3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_083" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_084" class="progress-bar progress-bar-danger red3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_084" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <th class="retention"style="width:100px;border: 1px solid #000">&nbsp;</th>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_085" class="progress-bar progress-bar-danger green3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_085" style="text-align:center">&nbsp;</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_086" class="progress-bar progress-bar-danger red3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_086" style="text-align:center">&nbsp;</p>
+                    </div>
+                    </div>
+                </td>
+                </tr>
+                <tr class="table3">
+                <th class="retention"style="width:100px;border: 1px solid #000">待出库(单)</th>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_091" class="progress-bar progress-bar-danger green3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_091" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_092" class="progress-bar progress-bar-danger red3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_092" style="text-align:center;margin-top:5%">0</p>
+                    </div>
+                    </div>
+                </td>
+                <th class="retention"style="width:100px;border: 1px solid #000">&nbsp;</th>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_093" class="progress-bar progress-bar-danger green3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_093" style="text-align:center">&nbsp;</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_094" class="progress-bar progress-bar-danger red3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_094" style="text-align:center">&nbsp;</p>
+                    </div>
+                    </div>
+                </td>
+                <th class="retention"style="width:100px;border: 1px solid #000">&nbsp;</th>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_095" class="progress-bar progress-bar-danger green3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_095" style="text-align:center">&nbsp;</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="color_096" class="progress-bar progress-bar-danger red3" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class="table4">
+                        <p id="data_096" style="text-align:center">&nbsp;</p>
+                    </div>
+                    </div>
+                </td>
+                </tr>
+
+                {#                <div id="main_yw" style="width: 33.3%;height: 100%;border: 1px solid #000;position: absolute">123#}
+{#                </div>#}
+{#                <div id="main_yw2" style="width: 33.3%;height: 100%;border: 1px solid #000;margin-left:33.3%;position: absolute">123#}
+{#                </div>#}
+{#                <div id="main_yw3" style="width: 33.3%;height: 100%;border: 1px solid #000;margin-left:66.6%;position: absolute">123</div>#}
+                </thead>
+            </table>
+            </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <div style="width: 24%;height: 100%;border: 1px solid #000">
+            <div id="DB_time" class = "index_title" style="width: 100%;height: 5%;border: 1px solid #000;">调拨情况</div>
+                <div  style="width: 100%;height: 45%;border: 1px solid #000;position: relative">
+               <div id="main_db" style="position: absolute;bottom: 0px;width: 100%;height: 100%;#display: block;"></div>
+
+                </div>
+
+
+
+
+            <div style="width: 100%;height: 5%;border: 1px solid #000;" id="dcl_time" class = "index_title">业务达成率</div>
+                <div  style="width: 100%;height: 45%;border: 1px solid #000;position: relative">
+                 <table style="border: 1px solid #000;width: 100%;height:10%;bottom: 2px;position: relative">
+                <thead style="border: 1px solid #000">
+
+                <tr class="table3">
+                            <th colspan="7" style="width:100px;height:80%;border: 1px solid #000;font-weight:bolder;background-color: rgba(47,69,84,0.75);color:#fff !important">入库段</th>
+                           </tr>
+                <tr class="table5">
+                            <th colspan="1" class="table5" style="width:100px;background-color: rgba(47,69,84,0.75);color:#fff !important">入库</th>
+                            <th colspan="1" class="table5" style="width:100px;background-color: rgba(47,69,84,0.75);color:#fff !important">入库时长</th>
+                            <th colspan="1" class="table5" style="width:100px;background-color: rgba(47,69,84,0.75);color:#fff !important">贴码时长</th>
+                            <th colspan="1" class="table5" style="width:100px;background-color: rgba(47,69,84,0.75);color:#fff !important">质检时长</th>
+                            <th colspan="1" class="table5" style="width:100px;background-color: rgba(47,69,84,0.75);color:#fff !important">上架时长</th>
+                            <th colspan="1" class="table5" style="width:100px;background-color: rgba(47,69,84,0.75);color:#fff !important">12H</th>
+                            <th colspan="1" class="table5" style="width:100px;background-color: rgba(47,69,84,0.75);color:#fff !important">24H</th>
+
+               </tr>
+                <tr class="table5">
+                            <th colspan="1" class="table5" style="width:100px;border: 1px solid #000">虎门仓</th>
+                            <th id="dcl_011" colspan="1" class="table5" style="width:100px;border: 1px solid #000">0</th>
+                            <th id="dcl_012" colspan="1" class="table5" style="width:100px;border: 1px solid #000">0</th>
+                            <th id="dcl_013" colspan="1" class="table5" style="width:100px;border: 1px solid #000">0</th>
+                            <th id="dcl_014" colspan="1" class="table5" style="width:100px;border: 1px solid #000">0</th>
+                            <td class=" " style="position:relative;">
+                            <div class="retention"style="width: 100%;height: 100%;">
+                                <div id="dcl_color_011" class="progress-bar progress-bar-danger red4" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                            <div class=""style="height:100%">
+                                <p id="dcl_015" style="text-align:center;top:15%;position: relative">0</p>
+                            </div>
+                            </div>
+                            </td>
+                            <td class=" " style="position:relative;border: 1px solid #000">
+                            <div class="retention"style="width: 100%;height: 100%;">
+                                <div id="dcl_color_012" class="progress-bar progress-bar-danger red4" role="progressbar"
+                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: 0%;margin-left: 0px;">
+                                </div>
+                                <div class="" style="height:100%" >
+                                <p id="dcl_016" style="text-align:center;top:15%;position: relative">0</p>
+                            </div>
+                            </div>
+                             </td>
+                </tr>
+                <tr class="">
+                            <th colspan="1" class="table5" style="width:100px;border: 1px solid #000">塘厦仓</th>
+                            <th id="dcl_021"colspan="1" class="table5" style="width:100px;border: 1px solid #000">0</th>
+                            <th id="dcl_022"colspan="1" class="table5" style="width:100px;border: 1px solid #000">0</th>
+                            <th id="dcl_023" colspan="1" class="table5" style="width:100px;border: 1px solid #000">0</th>
+                            <th id="dcl_024" colspan="1" class="table5" style="width:100px;border: 1px solid #000">0</th>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="dcl_color_021" class="progress-bar progress-bar-danger red4" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                    <div class=""style="height:100%">
+                        <p id="dcl_025" style="text-align:center;top:15%;position: relative">0</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="dcl_color_022" class="progress-bar progress-bar-danger red4" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class=""style="height:100%">
+                        <p id="dcl_026" style="text-align:center;top:15%;position: relative">0</p>
+                    </div>
+                    </div>
+                </td>
+                </tr>
+                <tr class="table3">
+                            <th colspan="7" style="width:100px;height:80%;border: 1px solid #000;font-weight:bolder;background-color: rgba(194,53,49,0.75);color:#fff !important">出库段</th>
+                           </tr>
+                                <tr class="table5">
+                            <th colspan="1" class="table5" style="width:100px;background-color: rgba(194,53,49,0.75);color:#fff !important">小包</th>
+                            <th colspan="1" class="table5" style="width:100px;background-color: rgba(194,53,49,0.75);color:#fff !important">拉单时长</th>
+                            <th colspan="1" class="table5" style="width:100px;background-color: rgba(194,53,49,0.75);color:#fff !important">拣货时长</th>
+                            <th colspan="1" class="table5" style="width:100px;background-color: rgba(194,53,49,0.75);color:#fff !important">打包时长</th>
+                            <th colspan="1" class="table5" style="width:100px;background-color: rgba(194,53,49,0.75);color:#fff !important">出库时长</th>
+                            <th colspan="1" class="table5" style="width:100px;background-color: rgba(194,53,49,0.75);color:#fff !important">12H</th>
+                            <th colspan="1" class="table5" style="width:100px;background-color: rgba(194,53,49,0.75);color:#fff !important">24H</th>
+
+               </tr>
+
+                                <tr class="">
+                            <th colspan="1" class="table5" style="width:100px;border: 1px solid #000">虎门仓</th>
+                            <th id="dcl_031"colspan="1" class="table5" style="width:100px;border: 1px solid #000">0</th>
+                            <th id="dcl_032"colspan="1" class="table5" style="width:100px;border: 1px solid #000">0</th>
+                            <th id="dcl_033" colspan="1" class="table5" style="width:100px;border: 1px solid #000">0</th>
+                            <th id="dcl_034" colspan="1" class="table5" style="width:100px;border: 1px solid #000">0</th>
+                <td class=" " style="position:relative;">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="dcl_color_031" class="progress-bar progress-bar-danger green4" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                    <div class=""style="height:100%">
+                        <p id="dcl_035" style="text-align:center;top:15%;position: relative">0</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="dcl_color_032" class="progress-bar progress-bar-danger green4" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class=""style="height:100%">
+                        <p id="dcl_036" style="text-align:center;top:15%;position: relative">0</p>
+                    </div>
+                    </div>
+                </td>
+                </tr>
+                <tr class="table5">
+                            <th colspan="1" class="table5" style="width:100px;border: 1px solid #000">塘厦仓</th>
+                            <th id="dcl_041" colspan="1" class="table5" style="width:100px;border: 1px solid #000">0</th>
+                            <th id="dcl_042" colspan="1" class="table5" style="width:100px;border: 1px solid #000">0</th>
+                            <th id="dcl_043" colspan="1" class="table5" style="width:100px;border: 1px solid #000">0</th>
+                            <th id="dcl_044" colspan="1" class="table5" style="width:100px;border: 1px solid #000">0</th>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="dcl_color_041" class="progress-bar progress-bar-danger green4" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                    <div class=""style="height:100%">
+                        <p id="dcl_045" style="text-align:center;top:15%;position: relative">0</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="dcl_color_042" class="progress-bar progress-bar-danger green4" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class=""style="height:100%">
+                        <p id="dcl_046" style="text-align:center;top:15%;position: relative">0</p>
+                    </div>
+                    </div>
+                </td>
+                </tr>
+
+                <tr class="table5">
+                            <th colspan="1" class="table5" style="width:100px;background-color: rgba(194,53,49,0.75);color:#fff !important">FBA</th>
+                            <th colspan="1" class="table5" style="width:100px;background-color: rgba(194,53,49,0.75);color:#fff !important">拉单时长</th>
+                            <th colspan="1" class="table5" style="width:100px;background-color: rgba(194,53,49,0.75);color:#fff !important">拣货时长</th>
+                            <th colspan="1" class="table5" style="width:100px;background-color: rgba(194,53,49,0.75);color:#fff !important">打包时长</th>
+                            <th colspan="1" class="table5" style="width:100px;background-color: rgba(194,53,49,0.75);color:#fff !important">出库时长</th>
+                            <th colspan="1" class="table5" style="width:100px;background-color: rgba(194,53,49,0.75);color:#fff !important">24H</th>
+                            <th colspan="1" class="table5" style="width:100px;background-color: rgba(194,53,49,0.75);color:#fff !important">36H</th>
+
+               </tr>
+
+                <tr class="">
+                            <th colspan="1" class="table5" style="width:100px;border: 1px solid #000">虎门仓</th>
+                            <th id="dcl_051"colspan="1" class="table5" style="width:100px;border: 1px solid #000">0</th>
+                            <th id="dcl_052"colspan="1" class="table5" style="width:100px;border: 1px solid #000">0</th>
+                            <th id="dcl_053" colspan="1" class="table5" style="width:100px;border: 1px solid #000">0</th>
+                            <th id="dcl_054" colspan="1" class="table5" style="width:100px;border: 1px solid #000">0</th>
+                <td class=" " style="position:relative;">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="dcl_color_051" class="progress-bar progress-bar-danger green4" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                    <div class=""style="height:100%">
+                        <p id="dcl_055" style="text-align:center;top:15%;position: relative">0</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="dcl_color_052" class="progress-bar progress-bar-danger green4" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class=""style="height:100%">
+                        <p id="dcl_056" style="text-align:center;top:15%;position: relative">0</p>
+                    </div>
+                    </div>
+                </td>
+                </tr>
+                <tr class="table5">
+                            <th colspan="1" class="table5" style="width:100px;border: 1px solid #000">塘厦仓</th>
+                            <th id="dcl_061"colspan="1" class="table5" style="width:100px;border: 1px solid #000">0</th>
+                            <th id="dcl_062"colspan="1" class="table5" style="width:100px;border: 1px solid #000">0</th>
+                            <th id="dcl_063" colspan="1" class="table5" style="width:100px;border: 1px solid #000">0</th>
+                            <th id="dcl_064" colspan="1" class="table5" style="width:100px;border: 1px solid #000">0</th>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="dcl_color_061" class="progress-bar progress-bar-danger green4" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                    <div class=""style="height:100%">
+                        <p id="dcl_065" style="text-align:center;top:15%;position: relative">0</p>
+                    </div>
+                    </div>
+                </td>
+                <td class=" " style="position:relative;border: 1px solid #000">
+                    <div class="retention"style="width: 100%;height: 100%;">
+                        <div id="dcl_color_062" class="progress-bar progress-bar-danger green4" role="progressbar"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 0%;margin-left: 0px;">
+                        </div>
+                        <div class=""style="height:100%">
+                        <p id="dcl_066" style="text-align:center;top:15%;position: relative">0</p>
+                    </div>
+                    </div>
+                </td>
+                </tr>
+
+
+
+                </thead>
+                 </table>
+
+
+                </div>
+
+
+                {#            <div style="width: 100%;height: 95%;border: 1px solid #000;position: relative">#}
+{#                <div id = "main_zl" style="width: 100%;height: 100%;border: 1px solid #000;position: absolute">#}
+{#                </div>#}
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var tph_data ={
+        hm_tph_date:[] ,
+        hm_uph:[] ,
+        hm_tph:[],
+        tx_tph_date:[] ,
+        tx_uph:[] ,
+        tx_tph:[]
+
+    }
+    var dcl_data = {
+        dcl_1:[],
+        dcl_2:[],
+        dcl_3:[],
+        dcl_4:[]
+
+    }
+    var ry_data ={
+        hm_total:[],
+        tx_total:[],
+        hm_total2:[],
+        tx_total2:[]
+    }
+    var jy_data = {
+            hm_jy_XB_totoal:[],
+            hm_jy_FB_totoal:[],
+            tx_jy_XB_totoal:[],
+            tx_jy_FB_totoal:[],
+            hm_jy_DB_totoal:[],
+            tx_jy_DB_totoal:[],
+            hm_jy_XB_totoal_color:[],
+            hm_jy_FB_totoal_color:[],
+            tx_jy_XB_totoal_color:[],
+            tx_jy_FB_totoal_color:[],
+            hm_jy_DB_totoal_color:[],
+            tx_jy_DB_totoal_color:[]
+        }
+    var zl_data = {
+        hm_zl_cost : [],
+        hm_zl_time : [],
+        tx_zl_cost : [],
+        tx_zl_time : []
+    }
+    var sx_data = {
+        tx_sx_in :[],
+        tx_sx_out :[],
+        tx_sx_fba :[],
+        hm_sx_in :[],
+        hm_sx_out :[],
+        hm_sx_fba :[],
+        tx_sx_date:[],
+        hm_sx_date:[]
+    }
+    var rk_data = {
+        hm_rk_in :[],
+        hm_rk_out :[],
+        hm_rk_ld :[],
+        tx_rk_in :[],
+        tx_rk_out :[],
+        tx_rk_ld :[]
+    }
+    var zt_data =  {
+        zt_date:[],
+        zt_1:[],
+        zt_2:[],
+        zt_3:[],
+        zt_4:[],
+        zt_5:[]
+    }
+    var db_data  ={
+        db_in:[],
+        db_out:[],
+        db_total:[] ,
+        db_date:[]
+
+    }
+    var dcl2_data={
+        dcl2_in:[],
+        dcl2_out:[],
+        dcl2_fba:[]
+    }
+    function getData() {
+        $.ajax({
+            url: 'daily1',
+            data: {},
+            type: 'POST',
+            async: false,
+            dataType: 'json',
+            success: function (data) {
+                jy_data.hm_jy_XB_totoal = data.hm_jy_XB_totoal
+                jy_data.hm_jy_FB_totoal = data.hm_jy_FB_totoal
+                jy_data.tx_jy_XB_totoal = data.tx_jy_XB_totoal
+                jy_data.tx_jy_FB_totoal = data.tx_jy_FB_totoal
+                jy_data.hm_jy_DB_totoal = data.hm_jy_DB_totoal
+                jy_data.tx_jy_DB_totoal = data.tx_jy_DB_totoal
+                jy_data.hm_jy_XB_totoal_color = data.hm_jy_XB_totoal_color
+                jy_data.hm_jy_FB_totoal_color = data.hm_jy_FB_totoal_color
+                jy_data.tx_jy_XB_totoal_color = data.tx_jy_XB_totoal_color
+                jy_data.tx_jy_FB_totoal_color = data.tx_jy_FB_totoal_color
+                jy_data.hm_jy_DB_totoal_color = data.hm_jy_DB_totoal_color
+                jy_data.tx_jy_DB_totoal_color = data.tx_jy_DB_totoal_color
+                zl_data.hm_zl_cost = data.hm_zl_cost
+                zl_data.hm_zl_time = data.hm_zl_time
+                zl_data.tx_zl_cost = data.tx_zl_cost
+                zl_data.tx_zl_time = data.tx_zl_time
+                sx_data.tx_sx_date = data.tx_sx_date
+                sx_data.hm_sx_date = data.hm_sx_date
+                sx_data.tx_sx_in = data.tx_sx_in
+                sx_data.tx_sx_out = data.tx_sx_out
+                sx_data.tx_sx_fba = data.tx_sx_fba
+                sx_data.hm_sx_in = data.hm_sx_in
+                sx_data.hm_sx_out = data.hm_sx_out
+                sx_data.hm_sx_fba = data.hm_sx_fba
+                rk_data.hm_rk_in = data.hm_rk_in
+                rk_data.hm_rk_out = data.hm_rk_out
+                rk_data.hm_rk_ld = data.hm_rk_ld
+                rk_data.tx_rk_in = data.tx_rk_in
+                rk_data.tx_rk_out = data.tx_rk_out
+                rk_data.tx_rk_ld = data.tx_rk_ld
+                tph_data.hm_tph = data.hm_tph
+                tph_data.hm_tph_date = data.hm_tph_date
+                tph_data.hm_uph = data.hm_uph
+                tph_data.tx_tph = data.tx_tph
+                tph_data.tx_tph_date = data.tx_tph_date
+                tph_data.tx_uph = data.tx_uph
+                ry_data.hm_total = data.hm_total
+                ry_data.tx_total = data.tx_total
+                ry_data.hm_total2 = data.hm_change
+                ry_data.tx_total2 = data.tx_change
+                zt_data.zt_date  = data.zt_date
+                zt_data.zt_1  = data.zt_1
+                zt_data.zt_2  = data.zt_2
+                zt_data.zt_3  = data.zt_3
+                zt_data.zt_4  = data.zt_4
+                zt_data.zt_5  = data.zt_5
+                dcl_data.dcl_1 = data.dcl_1
+                dcl_data.dcl_2 = data.dcl_2
+                dcl_data.dcl_3 = data.dcl_3
+                dcl_data.dcl_4 = data.dcl_4
+
+                db_data.db_in=data.db_in
+                db_data.db_out=data.db_out
+                db_data.db_total=data.db_total
+                db_data.db_date= data.db_date
+                dcl2_data.dcl2_in=data.dcl2_in
+                dcl2_data.dcl2_out=data.dcl2_out
+                dcl2_data.dcl2_fba=data.dcl2_fba
+
+
+
+            }
+        });
+    }
+
+    function RK_data() {
+        document.getElementById('hm_rk_in').innerHTML = rk_data.hm_rk_in[0]
+        document.getElementById('hm_rk_out').innerHTML = rk_data.hm_rk_out[0]
+        document.getElementById('hm_rk_ld').innerHTML = rk_data.hm_rk_ld[0]
+        document.getElementById('tx_rk_in').innerHTML = rk_data.tx_rk_in[0]
+        document.getElementById('tx_rk_out').innerHTML = rk_data.tx_rk_out[0]
+        document.getElementById('tx_rk_ld').innerHTML = rk_data.tx_rk_ld[0]
+       }
+    {#function TPH() {#}
+    {#    document.getElementById('HM_TPH').innerHTML = tph_data.hm_tph[5]#}
+    {#    document.getElementById('HM_UPH').innerHTML = tph_data.hm_uph[5]#}
+    {#    document.getElementById('TX_TPH').innerHTML = tph_data.tx_tph[5]#}
+    {#    document.getElementById('TX_UPH').innerHTML = tph_data.tx_uph[5]#}
+    {##}
+    {##}
+    {#   }#}
+    getData();
+    // TPH();
+
+    function myCharts() {
+            {#var myCharts_sx = echarts.init(document.getElementById('main_sx'));#}
+            {#var myCharts_sx2 = echarts.init(document.getElementById('main_sx2'));#}
+            {#var myCharts_yw = echarts.init(document.getElementById('main_yw'));#}
+            {#var myCharts_yw2 = echarts.init(document.getElementById('main_yw2'));#}
+            {#var myCharts_yw3 = echarts.init(document.getElementById('main_yw3'));#}
+
+            {#var myCharts_zl = echarts.init(document.getElementById('main_zl'));#}
+            {#var myCharts_hp_hm = echarts.init(document.getElementById('main_hp_hm'));#}
+            {#var myCharts_hp_tx = echarts.init(document.getElementById('main_hp_tx'));#}
+            var myCharts_dx = echarts.init(document.getElementById('main_dx'))
+            var myCharts_dx2 = echarts.init(document.getElementById('main_dx2'))
+            var myCharts_yy = echarts.init(document.getElementById('main_yy'))
+            var myCharts_db = echarts.init(document.getElementById('main_db'))
+
+            {#var myCharts_yy2 = echarts.init(document.getElementById('main_yy2'))#}
+
+            {#myCharts_sx.setOption(option_sx)#}
+            {#myCharts_sx2.setOption(option_sx2)#}
+            {#myCharts_yw.setOption(option_yw)#}
+            {#myCharts_yw2.setOption(option_yw2)#}
+            {#myCharts_yw3.setOption(option_yw3)#}
+
+            {#myCharts_zl.setOption(option_zl)#}
+            {#myCharts_hp_hm.setOption(option_hp_hm)#}
+            {#myCharts_hp_tx.setOption(option_hp_tx)#}
+            myCharts_dx.setOption(option_dx)
+            myCharts_dx2.setOption(option_dx2)
+            myCharts_yy.setOption(option_yy)
+            myCharts_db.setOption(option_db)
+
+            {#myCharts_yy2.setOption(option_yy2)#}
+
+                    {#return [myCharts_sx2,myCharts_dx2]#}
+
+        }
+
+    function JY(){
+        {#小包#}
+        document.getElementById('data_011').innerHTML = jy_data.hm_jy_XB_totoal[8]
+        document.getElementById('data_021').innerHTML = jy_data.hm_jy_XB_totoal[7]
+        document.getElementById('data_031').innerHTML = jy_data.hm_jy_XB_totoal[6]
+        document.getElementById('data_041').innerHTML = jy_data.hm_jy_XB_totoal[5]
+        document.getElementById('data_051').innerHTML = jy_data.hm_jy_XB_totoal[4]
+        document.getElementById('data_061').innerHTML = jy_data.hm_jy_XB_totoal[3]
+        document.getElementById('data_071').innerHTML = jy_data.hm_jy_XB_totoal[2]
+        document.getElementById('data_081').innerHTML = jy_data.hm_jy_XB_totoal[1]
+        document.getElementById('data_091').innerHTML = jy_data.hm_jy_XB_totoal[0]
+
+        
+        document.getElementById('data_012').innerHTML = jy_data.tx_jy_XB_totoal[8]
+        document.getElementById('data_022').innerHTML = jy_data.tx_jy_XB_totoal[7]
+        document.getElementById('data_032').innerHTML = jy_data.tx_jy_XB_totoal[6]
+        document.getElementById('data_042').innerHTML = jy_data.tx_jy_XB_totoal[5]
+        document.getElementById('data_052').innerHTML = jy_data.tx_jy_XB_totoal[4]
+        document.getElementById('data_062').innerHTML = jy_data.tx_jy_XB_totoal[3]
+        document.getElementById('data_072').innerHTML = jy_data.tx_jy_XB_totoal[2]
+        document.getElementById('data_082').innerHTML = jy_data.tx_jy_XB_totoal[1]
+        document.getElementById('data_092').innerHTML = jy_data.tx_jy_XB_totoal[0]
+
+
+        {#FBA#}
+        document.getElementById('data_013').innerHTML = jy_data.hm_jy_FB_totoal[7]
+        document.getElementById('data_023').innerHTML = jy_data.hm_jy_FB_totoal[6]
+        document.getElementById('data_033').innerHTML = jy_data.hm_jy_FB_totoal[5]
+        document.getElementById('data_043').innerHTML = jy_data.hm_jy_FB_totoal[4]
+        document.getElementById('data_053').innerHTML = jy_data.hm_jy_FB_totoal[3]
+        document.getElementById('data_063').innerHTML = jy_data.hm_jy_FB_totoal[2]
+        document.getElementById('data_073').innerHTML = jy_data.hm_jy_FB_totoal[1]
+        document.getElementById('data_083').innerHTML = jy_data.hm_jy_FB_totoal[0]
+
+
+        document.getElementById('data_014').innerHTML = jy_data.tx_jy_FB_totoal[7]
+        document.getElementById('data_024').innerHTML = jy_data.tx_jy_FB_totoal[6]
+        document.getElementById('data_034').innerHTML = jy_data.tx_jy_FB_totoal[5]
+        document.getElementById('data_044').innerHTML = jy_data.tx_jy_FB_totoal[4]
+        document.getElementById('data_054').innerHTML = jy_data.tx_jy_FB_totoal[3]
+        document.getElementById('data_064').innerHTML = jy_data.tx_jy_FB_totoal[2]
+        document.getElementById('data_074').innerHTML = jy_data.tx_jy_FB_totoal[1]
+        document.getElementById('data_084').innerHTML = jy_data.tx_jy_FB_totoal[0]
+
+        {#DB#}
+        document.getElementById('data_015').innerHTML = jy_data.hm_jy_DB_totoal[6]
+        document.getElementById('data_025').innerHTML = jy_data.hm_jy_DB_totoal[5]
+        document.getElementById('data_035').innerHTML = jy_data.hm_jy_DB_totoal[4]
+        document.getElementById('data_045').innerHTML = jy_data.hm_jy_DB_totoal[3]
+        document.getElementById('data_055').innerHTML = jy_data.hm_jy_DB_totoal[2]
+        document.getElementById('data_065').innerHTML = jy_data.hm_jy_DB_totoal[1]
+        {#document.getElementById('data_075').innerHTML = jy_data.hm_jy_DB_totoal[0]#}
+
+        document.getElementById('data_016').innerHTML = jy_data.tx_jy_DB_totoal[6]
+        document.getElementById('data_026').innerHTML = jy_data.tx_jy_DB_totoal[5]
+        document.getElementById('data_036').innerHTML = jy_data.tx_jy_DB_totoal[4]
+        document.getElementById('data_046').innerHTML = jy_data.tx_jy_DB_totoal[3]
+        document.getElementById('data_056').innerHTML = jy_data.tx_jy_DB_totoal[2]
+        document.getElementById('data_066').innerHTML = jy_data.tx_jy_DB_totoal[1]
+        {#document.getElementById('data_076').innerHTML = jy_data.tx_jy_DB_totoal[0]#}
+
+        document.getElementById('color_011').style.width = jy_data.hm_jy_XB_totoal_color[8]
+        document.getElementById('color_021').style.width = jy_data.hm_jy_XB_totoal_color[7]
+        document.getElementById('color_031').style.width = jy_data.hm_jy_XB_totoal_color[6]
+        document.getElementById('color_041').style.width = jy_data.hm_jy_XB_totoal_color[5]
+        document.getElementById('color_051').style.width = jy_data.hm_jy_XB_totoal_color[4]
+        document.getElementById('color_061').style.width = jy_data.hm_jy_XB_totoal_color[3]
+        document.getElementById('color_071').style.width = jy_data.hm_jy_XB_totoal_color[2]
+        document.getElementById('color_081').style.width = jy_data.hm_jy_XB_totoal_color[1]
+        document.getElementById('color_091').style.width = jy_data.hm_jy_XB_totoal_color[0]
+
+
+        document.getElementById('color_012').style.width = jy_data.tx_jy_XB_totoal_color[8]
+        document.getElementById('color_022').style.width = jy_data.tx_jy_XB_totoal_color[7]
+        document.getElementById('color_032').style.width = jy_data.tx_jy_XB_totoal_color[6]
+        document.getElementById('color_042').style.width = jy_data.tx_jy_XB_totoal_color[5]
+        document.getElementById('color_052').style.width = jy_data.tx_jy_XB_totoal_color[4]
+        document.getElementById('color_062').style.width = jy_data.tx_jy_XB_totoal_color[3]
+        document.getElementById('color_072').style.width = jy_data.tx_jy_XB_totoal_color[2]
+        document.getElementById('color_082').style.width = jy_data.tx_jy_XB_totoal_color[1]
+        document.getElementById('color_092').style.width = jy_data.tx_jy_XB_totoal_color[0]
+
+
+        {#FBA#}
+        document.getElementById('color_013').style.width = jy_data.hm_jy_FB_totoal_color[7]
+        document.getElementById('color_023').style.width = jy_data.hm_jy_FB_totoal_color[6]
+        document.getElementById('color_033').style.width = jy_data.hm_jy_FB_totoal_color[5]
+        document.getElementById('color_043').style.width = jy_data.hm_jy_FB_totoal_color[4]
+        document.getElementById('color_053').style.width = jy_data.hm_jy_FB_totoal_color[3]
+        document.getElementById('color_063').style.width = jy_data.hm_jy_FB_totoal_color[2]
+        document.getElementById('color_073').style.width = jy_data.hm_jy_FB_totoal_color[1]
+        document.getElementById('color_083').style.width = jy_data.hm_jy_FB_totoal_color[0]
+
+
+        document.getElementById('color_014').style.width = jy_data.tx_jy_FB_totoal_color[7]
+        document.getElementById('color_024').style.width = jy_data.tx_jy_FB_totoal_color[6]
+        document.getElementById('color_034').style.width = jy_data.tx_jy_FB_totoal_color[5]
+        document.getElementById('color_044').style.width = jy_data.tx_jy_FB_totoal_color[4]
+        document.getElementById('color_054').style.width = jy_data.tx_jy_FB_totoal_color[3]
+        document.getElementById('color_064').style.width = jy_data.tx_jy_FB_totoal_color[2]
+        document.getElementById('color_074').style.width = jy_data.tx_jy_FB_totoal_color[1]
+        document.getElementById('color_084').style.width = jy_data.tx_jy_FB_totoal_color[0]
+
+
+        {#DB#}
+        document.getElementById('color_015').style.width = jy_data.hm_jy_DB_totoal_color[6]
+        document.getElementById('color_025').style.width = jy_data.hm_jy_DB_totoal_color[5]
+        document.getElementById('color_035').style.width = jy_data.hm_jy_DB_totoal_color[4]
+        document.getElementById('color_045').style.width = jy_data.hm_jy_DB_totoal_color[3]
+        document.getElementById('color_055').style.width = jy_data.hm_jy_DB_totoal_color[2]
+        document.getElementById('color_065').style.width = jy_data.hm_jy_DB_totoal_color[1]
+        document.getElementById('color_075').style.width = jy_data.hm_jy_DB_totoal_color[0]
+
+        document.getElementById('color_016').style.width = jy_data.tx_jy_DB_totoal_color[6]
+        document.getElementById('color_026').style.width = jy_data.tx_jy_DB_totoal_color[5]
+        document.getElementById('color_036').style.width = jy_data.tx_jy_DB_totoal_color[4]
+        document.getElementById('color_046').style.width = jy_data.tx_jy_DB_totoal_color[3]
+        document.getElementById('color_056').style.width = jy_data.tx_jy_DB_totoal_color[2]
+        document.getElementById('color_066').style.width = jy_data.tx_jy_DB_totoal_color[1]
+        document.getElementById('color_076').style.width = jy_data.tx_jy_DB_totoal_color[0]
+    }
+    JY();
+    function RY2_data(){
+        document.getElementById('RY_011').innerHTML = ry_data.hm_total[0]
+        document.getElementById('RY_021').innerHTML = ry_data.hm_total[1]
+        document.getElementById('RY_031').innerHTML = ry_data.hm_total[2]
+        document.getElementById('RY_041').innerHTML = ry_data.hm_total[3]
+        document.getElementById('RY_051').innerHTML = ry_data.hm_total[4]
+        document.getElementById('RY_061').innerHTML = ry_data.hm_total[5]
+        document.getElementById('RY_071').innerHTML = ry_data.hm_total[6]
+        document.getElementById('RY_081').innerHTML = ry_data.hm_total[7]
+        document.getElementById('RY_091').innerHTML = ry_data.hm_total[8]
+        document.getElementById('RY_012').innerHTML = ry_data.tx_total[0]
+        document.getElementById('RY_022').innerHTML = ry_data.tx_total[1]
+        document.getElementById('RY_032').innerHTML = ry_data.tx_total[2]
+        document.getElementById('RY_042').innerHTML = ry_data.tx_total[3]
+        document.getElementById('RY_052').innerHTML = ry_data.tx_total[4]
+        document.getElementById('RY_062').innerHTML = ry_data.tx_total[5]
+        document.getElementById('RY_072').innerHTML = ry_data.tx_total[6]
+        document.getElementById('RY_082').innerHTML = ry_data.tx_total[7]
+        document.getElementById('RY_092').innerHTML = ry_data.tx_total[8]
+        document.getElementById('RY_013').innerHTML = ry_data.hm_total2[0]
+        document.getElementById('RY_023').innerHTML = ry_data.hm_total2[1]
+        document.getElementById('RY_033').innerHTML = ry_data.hm_total2[2]
+        document.getElementById('RY_043').innerHTML = ry_data.hm_total2[3]
+        document.getElementById('RY_053').innerHTML = ry_data.hm_total2[4]
+        document.getElementById('RY_063').innerHTML = ry_data.hm_total2[5]
+        document.getElementById('RY_073').innerHTML = ry_data.hm_total2[6]
+        document.getElementById('RY_014').innerHTML = ry_data.tx_total2[0]
+        document.getElementById('RY_024').innerHTML = ry_data.tx_total2[1]
+        document.getElementById('RY_034').innerHTML = ry_data.tx_total2[2]
+        document.getElementById('RY_044').innerHTML = ry_data.tx_total2[3]
+        document.getElementById('RY_054').innerHTML = ry_data.tx_total2[4]
+        document.getElementById('RY_064').innerHTML = ry_data.tx_total2[5]
+        document.getElementById('RY_074').innerHTML = ry_data.tx_total2[6]
+
+    }
+    function DCL_data() {
+         console.log(dcl_data.dcl_1[0])
+        document.getElementById('dcl_011').innerHTML = dcl_data.dcl_1[0]
+        document.getElementById('dcl_012').innerHTML = dcl_data.dcl_2[0]
+        document.getElementById('dcl_013').innerHTML = dcl_data.dcl_3[0]
+        document.getElementById('dcl_014').innerHTML = dcl_data.dcl_4[0]
+        document.getElementById('dcl_031').innerHTML = dcl_data.dcl_1[1]
+        document.getElementById('dcl_032').innerHTML = dcl_data.dcl_2[1]
+        document.getElementById('dcl_033').innerHTML = dcl_data.dcl_3[1]
+        document.getElementById('dcl_034').innerHTML = dcl_data.dcl_4[1]
+        document.getElementById('dcl_051').innerHTML = dcl_data.dcl_1[2]
+        document.getElementById('dcl_052').innerHTML = dcl_data.dcl_2[2]
+        document.getElementById('dcl_053').innerHTML = dcl_data.dcl_3[2]
+        document.getElementById('dcl_054').innerHTML = dcl_data.dcl_4[2]
+        document.getElementById('dcl_021').innerHTML = dcl_data.dcl_1[3]
+        document.getElementById('dcl_022').innerHTML = dcl_data.dcl_2[3]
+        document.getElementById('dcl_023').innerHTML = dcl_data.dcl_3[3]
+        document.getElementById('dcl_024').innerHTML = dcl_data.dcl_4[3]
+        document.getElementById('dcl_041').innerHTML = dcl_data.dcl_1[4]
+        document.getElementById('dcl_042').innerHTML = dcl_data.dcl_2[4]
+        document.getElementById('dcl_043').innerHTML = dcl_data.dcl_3[4]
+        document.getElementById('dcl_044').innerHTML = dcl_data.dcl_4[4]
+        document.getElementById('dcl_061').innerHTML = dcl_data.dcl_1[5]
+        document.getElementById('dcl_062').innerHTML = dcl_data.dcl_2[5]
+        document.getElementById('dcl_063').innerHTML = dcl_data.dcl_3[5]
+        document.getElementById('dcl_064').innerHTML = dcl_data.dcl_4[5]
+       }
+    function DCL2_data() {
+        document.getElementById('dcl_015').innerHTML = (dcl2_data.dcl2_in[0]*100).toFixed(1)+'%'
+        document.getElementById('dcl_025').innerHTML = (dcl2_data.dcl2_in[3]*100).toFixed(1)+'%'
+        document.getElementById('dcl_016').innerHTML = (dcl2_data.dcl2_in[6]*100).toFixed(1)+'%'
+        document.getElementById('dcl_026').innerHTML = (dcl2_data.dcl2_in[7]*100).toFixed(1)+'%'
+        document.getElementById('dcl_035').innerHTML = (dcl2_data.dcl2_out[0]*100).toFixed(1)+'%'
+        document.getElementById('dcl_045').innerHTML = (dcl2_data.dcl2_out[3]*100).toFixed(1)+'%'
+        document.getElementById('dcl_036').innerHTML = (dcl2_data.dcl2_out[6]*100).toFixed(1)+'%'
+        document.getElementById('dcl_046').innerHTML = (dcl2_data.dcl2_out[7]*100).toFixed(1)+'%'
+        document.getElementById('dcl_055').innerHTML = (dcl2_data.dcl2_fba[6]*100).toFixed(1)+'%'
+        document.getElementById('dcl_065').innerHTML = (dcl2_data.dcl2_fba[8]*100).toFixed(1)+'%'
+        document.getElementById('dcl_056').innerHTML = (dcl2_data.dcl2_fba[7]*100).toFixed(1)+'%'
+        document.getElementById('dcl_066').innerHTML = (dcl2_data.dcl2_fba[9]*100).toFixed(1)+'%'
+
+       }
+
+    RY2_data();
+    var option_sx = {
+        tooltip: {
+            trigger: 'axis'
+        },
+
+        legend: {
+            textStyle: {
+                fontSize: 20
+            },
+
+            data: ['入库', '小包', 'FBA']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        toolbox: {
+            feature: {
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+
+            data: [sx_data.hm_sx_date[0],
+               sx_data.hm_sx_date[1],
+               sx_data.hm_sx_date[2],
+               sx_data.hm_sx_date[3],
+               sx_data.hm_sx_date[4],
+                sx_data.hm_sx_date[5],
+                sx_data.hm_sx_date[6]]
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                textStyle: {
+                    fontSize: 20
+                }
+            }
+        },
+        series: [
+            {
+                name: '入库',
+                type: 'line',
+                label: {
+                    normal: {
+                        show: true,
+                        formatter: '{c}'
+                    }
+                },
+                data: sx_data.hm_sx_in
+            },
+            {
+                name: '小包',
+                type: 'line',
+                label: {
+                    normal: {
+                        show: true,
+                        formatter: '{c}'
+                    }
+                },
+                data: sx_data.hm_sx_out
+            },
+            {
+                name: 'FBA',
+                type: 'line',
+                label: {
+                    normal: {
+                        show: true,
+                        formatter: '{c}'
+                    }
+                },
+                data: sx_data.hm_sx_fba
+            }
+        ]
+    };
+    var option_sx2 = {
+                    tooltip: {
+            trigger: 'axis'
+        },
+
+        legend: {
+            textStyle: {
+                fontSize: 20
+            },
+
+            data: ['入库', '小包', 'FBA']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        toolbox: {
+            feature: {
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: [sx_data.hm_sx_date[0],
+               sx_data.hm_sx_date[1],
+               sx_data.hm_sx_date[2],
+               sx_data.hm_sx_date[3],
+               sx_data.hm_sx_date[4],
+                sx_data.hm_sx_date[5],
+                sx_data.hm_sx_date[6]]
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                textStyle: {
+                    fontSize: 20
+                }
+            }
+        },
+        series: [
+            {
+                name: '入库',
+                type: 'line',
+                label: {
+                    normal: {
+                        show: true,
+                        formatter: '{c}'
+                    }
+                },
+                data: sx_data.tx_sx_in
+            },
+            {
+                name: '小包',
+                type: 'line',
+                label: {
+                    normal: {
+                        show: true,
+                        formatter: '{c}'
+                    }
+                },
+                data: sx_data.tx_sx_out
+            },
+            {
+                name: 'FBA',
+                type: 'line',
+                label: {
+                    normal: {
+                        show: true,
+                        formatter: '{c}'
+                    }
+                },
+                data: sx_data.tx_sx_fba
+            }
+        ]
+    };
+    var option_yw = {
+        title: {
+            text: '小包业务段',
+            x: 'center',
+            textStyle: {
+                fontSize: 30
+            }
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        legend: {
+            data: ['虎门仓', '塘厦仓'],
+            x: '5%',
+            y: '8%'
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'value',
+            boundaryGap: [0, 0.01]
+        },
+        yAxis: {
+            axisLabel: {
+                textStyle: {
+                    fontSize: 20
+                }
+            },
+            type: 'category',
+            /* data: ['待入库', '待质检', '待上架', '待拣货', '待打包', '待出库']*/
+            data: ['待出库', '待打包', '待拣货', '待上架', '待贴码', '待质检', '待入库']
+        },
+        series: [
+            {
+                name: '虎门仓',
+                type: 'bar',
+                label: {
+                    normal: {
+                        show: true,
+                        formatter: '{c}'
+                    }
+                },
+                data: jy_data.hm_jy_XB_totoal
+            },
+            {
+                name: '塘厦仓',
+                type: 'bar',
+                label: {
+                    normal: {
+                        show: true,
+                        formatter: '{c}'
+                    }
+                },
+                data: jy_data.tx_jy_XB_totoal
+            }
+        ]
+    };
+    var option_yw2 = {
+        title: {
+            text: 'FBA业务段',
+            x: 'center',
+            textStyle: {
+                fontSize: 30
+            }
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        legend: {
+            data: ['虎门仓', '塘厦仓'],
+            x: '5%'
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'value',
+            boundaryGap: [0, 0.01]
+        },
+        yAxis: {
+            axisLabel: {
+                textStyle: {
+                    fontSize: 20
+                }
+            },
+            type: 'category',
+            /*data: ['待拉单', '待拣货', '拣货中', '待打包', '待出库', '待交运']*/
+            data: ['待交运', '待出库', '待打包', '拣货中', '待拣货', '待拉单']
+
+        },
+        series: [
+            {
+                name: '虎门仓',
+                type: 'bar',
+                label: {
+                    normal: {
+                        show: true,
+                        formatter: '{c}'
+                    }
+                },
+                data: jy_data.hm_jy_FB_totoal
+            },
+            {
+                name: '塘厦仓',
+                type: 'bar',
+                label: {
+                    normal: {
+                        show: true,
+                        formatter: '{c}'
+                    }
+                },
+                data: jy_data.tx_jy_FB_totoal
+            }
+        ]
+    };
+    var option_yw3 = {
+        title: {
+            text: 'FBA业务段',
+            x: 'center',
+            textStyle: {
+                fontSize: 30
+            }
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        legend: {
+            data: ['虎门仓', '塘厦仓'],
+            x: '5%'
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'value',
+            boundaryGap: [0, 0.01]
+        },
+        yAxis: {
+            axisLabel: {
+                textStyle: {
+                    fontSize: 20
+                }
+            },
+            type: 'category',
+            /*data: ['待拉单', '待拣货', '拣货中', '待打包', '待出库', '待交运']*/
+            data: ['待交运', '待出库', '待打包', '拣货中', '待拣货', '待拉单']
+
+        },
+        series: [
+            {
+                name: '虎门仓',
+                type: 'bar',
+                label: {
+                    normal: {
+                        show: true,
+                        formatter: '{c}'
+                    }
+                },
+                data: jy_data.hm_jy_FB_totoal
+            },
+            {
+                name: '塘厦仓',
+                type: 'bar',
+                label: {
+                    normal: {
+                        show: true,
+                        formatter: '{c}'
+                    }
+                },
+                data: jy_data.tx_jy_FB_totoal
+            }
+        ]
+    };
+
+    var option_zl = {
+        title: [{
+            show: true,
+            text: '虎门仓',
+            x: 'center',
+            y: '5%',
+            textStyle: {
+                fontSize: 35
+            }
+
+        }, {
+            show: true,
+            text: '塘厦仓',
+            x: 'center',
+            y: '50%',
+            textStyle: {
+                fontSize: 35
+            }
+        }],
+        tooltip: {
+
+            trigger: 'item',
+            formatter: '{a} <br/>{b}: {c} ({d}%)'
+        },
+        legend: {
+            textStyle: {
+                fontSize: 20
+            },
+            orient: 'vertical',
+            left: 10,
+            data: ['<24H', '<48H', '>48H']
+        },
+        series: [
+            {
+                name: '时效',
+                type: 'pie',
+                radius: ['40%', '65%'],
+                center: ['50%', '30%'],
+                avoidLabelOverlap: false,
+
+
+                label: {
+                    normal: {
+                        show: true,
+                        fontSize: '16',
+                        fontWeight: 'bold',
+                        formatter: '{b}\n' + '{d}%\n' + '{c}万元',
+                        position: 'inner'
+                    }
+                },
+                labelLine: {
+                    normal: {
+                        show: true,
+                        length: -1
+                    }
+                },
+                data: [
+                    {value: zl_data.hm_zl_cost[2], name: '>48H'},
+                    {value: zl_data.hm_zl_cost[0], name: '<24H'},
+                    {value: zl_data.hm_zl_cost[1], name: '<48H'},
+                ]
+            },
+            {
+                name: '时效',
+                type: 'pie',
+                radius: ['40%', '65%'],
+                center: ['50%', '75%'],
+                avoidLabelOverlap: false,
+                label: {
+                    normal: {
+                        show: true,
+                        fontSize: '16',
+                        fontWeight: 'bold',
+                        formatter: '{b}\n' + '{d}%\n' + '{c}万元',
+                        position: 'inner'
+                    }
+                },
+
+                emphasis: {
+                    label: {
+                        show: true,
+                        fontSize: '30',
+                        fontWeight: 'bold',
+                        formatter: '{d}%'
+                    }
+                },
+                labelLine: {
+                    show: true
+                },
+                data: [
+                    {value: zl_data.tx_zl_cost[2], name: '>48H'},
+                    {value: zl_data.tx_zl_cost[0], name: '<24H'},
+                    {value: zl_data.tx_zl_cost[1], name: '<48H'},                    ]
+            }
+        ]
+    }
+    {#var option_hp_hm = {#}
+    {##}
+    {#    tooltip: {#}
+    {#        formatter: "{a} <br/>TPH: "+tph_data.hm_tph[5]+"</br>UPH："+tph_data.hm_uph[5]+""#}
+    {#    },#}
+    {##}
+    {#    series: [#}
+    {#        {#}
+    {#            name: "昨日情况",#}
+    {#            type: 'gauge',#}
+    {#            radius: '65%',#}
+    {#            center: ['50%', '55%'],#}
+    {#            axisLine: {#}
+    {#                lineStyle: {#}
+    {#                    width: 20,#}
+    {#                    color: [#}
+    {#                        [0.1, '#2F4554'],#}
+    {#                        [1, '#2F4554']#}
+    {#                    ],#}
+    {#                }#}
+    {#            },#}
+    {#            splitLine: {#}
+    {#                length: 12,#}
+    {#                color: '#2F4554'#}
+    {#            },#}
+    {#            axisLabel: { // 坐标轴小标记#}
+    {#                show: true,#}
+    {#                textStyle: { // 属性lineStyle控制线条样式#}
+    {#                    color: '#000000',#}
+    {#                    fontSize: 15, //改变仪表盘内刻度数字的大小#}
+    {#                    fontWeight: 'bolder',#}
+    {#                    shadowColor: '#000', //默认透明#}
+    {#                }#}
+    {#            },#}
+    {#            axisTick: {#}
+    {#                splitNumber: 5,#}
+    {#                color: '#0d1758'#}
+    {#            },#}
+    {#            pointer: {#}
+    {#                width: 5,#}
+    {#                length:80#}
+    {#            },#}
+    {#            title: {#}
+    {#                offsetCenter: ['-30%', '70%'],#}
+    {#                textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE#}
+    {#                    fontWeight: 'bolder',#}
+    {#                    fontSize: 20,#}
+    {#                }#}
+    {#            },#}
+    {#            detail: {#}
+    {#                show: false#}
+    {#            },#}
+    {#            data: [{#}
+    {#                value: tph_data.hm_uph[5],#}
+    {#                name: 'UPH'#}
+    {#            }]#}
+    {#        },#}
+    {#        {#}
+    {#            name: "昨日情况",#}
+    {#            radius: '85%',#}
+    {#            center: ['50%', '55%'],#}
+    {#            min: 0,#}
+    {#            max: 100,#}
+    {#            splitNumber: 10,#}
+    {#            type: 'gauge',#}
+    {#            axisLine: {#}
+    {#                lineStyle: {#}
+    {#                    width: 20,#}
+    {#                    color: [#}
+    {#                        [1, new echarts.graphic.LinearGradient(0, 0, 1, 0, [{#}
+    {#                            offset: 0.1,#}
+    {#                            color: "#C23531"#}
+    {#                        },#}
+    {#                            {#}
+    {#                                offset: 0.5,#}
+    {#                                color: "#C23531"#}
+    {#                            },#}
+    {#                            {#}
+    {#                                offset: 1,#}
+    {#                                color: "#C23531"#}
+    {#                            }#}
+    {#                        ])]#}
+    {#                    ]#}
+    {#                },#}
+    {##}
+    {#            },#}
+    {#            splitLine: {#}
+    {#                length: 20#}
+    {#            },#}
+    {#            axisLabel: { // 坐标轴小标记#}
+    {#                distance: -45,#}
+    {#                textStyle: { // 属性lineStyle控制线条样式#}
+    {#                    color: '#000',#}
+    {#                    fontSize: 18, //改变仪表盘内刻度数字的大小#}
+    {#                    fontWeight: 'bolder',#}
+    {#                    shadowColor: '#000', //默认透明#}
+    {#                }#}
+    {#            },#}
+    {#            axisTick: {#}
+    {#                splitNumber: 5#}
+    {#            },#}
+    {#            pointer: {#}
+    {#                width: 5,#}
+    {#                length:130#}
+    {#            },#}
+    {#            title: {#}
+    {#                offsetCenter: ['-40%', '70%'],#}
+    {#                textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE#}
+    {#                    fontWeight: 'bolder',#}
+    {#                    fontSize: 20,#}
+    {#                }#}
+    {#            },#}
+    {#            detail: {#}
+    {#                show: false#}
+    {#            },#}
+    {##}
+    {#            data: [{#}
+    {#                value: tph_data.hm_tph[5],#}
+    {#                name: 'TPH',#}
+    {#                itemStyle: {normal: {color: '#C23531'}}#}
+    {#            }#}
+    {#            ]#}
+    {#        }#}
+    {#    ]#}
+    {# };#}
+    {#var option_hp_tx = {#}
+    {#    tooltip: {#}
+    {#        formatter: "{a} <br/>TPH: "+tph_data.tx_tph[5]+"</br>UPH："+tph_data.tx_uph[5]+""#}
+    {#    },#}
+    {##}
+    {#    series: [#}
+    {#        {#}
+    {#            name: "昨日情况",#}
+    {#            type: 'gauge',#}
+    {#            radius: '65%',#}
+    {#            center: ['50%', '55%'],#}
+    {#            axisLine: {#}
+    {#                lineStyle: {#}
+    {#                    width: 20,#}
+    {#                    color: [#}
+    {#                        [0.1, '#2F4554'],#}
+    {#                        [1, '#2F4554']#}
+    {#                    ],#}
+    {#                }#}
+    {#            },#}
+    {#            splitLine: {#}
+    {#                length: 12,#}
+    {#                color: '#2F4554'#}
+    {#            },#}
+    {#            axisLabel: { // 坐标轴小标记#}
+    {#                show: true,#}
+    {#                textStyle: { // 属性lineStyle控制线条样式#}
+    {#                    color: '#000000',#}
+    {#                    fontSize: 15, //改变仪表盘内刻度数字的大小#}
+    {#                    fontWeight: 'bolder',#}
+    {#                    shadowColor: '#000', //默认透明#}
+    {#                }#}
+    {#            },#}
+    {#            axisTick: {#}
+    {#                splitNumber: 5,#}
+    {#                color: '#0d1758'#}
+    {#            },#}
+    {#            pointer: {#}
+    {#                width: 5,#}
+    {#                length:80#}
+    {#            },#}
+    {#            title: {#}
+    {#                offsetCenter: ['-30%', '70%'],#}
+    {#                textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE#}
+    {#                    fontWeight: 'bolder',#}
+    {#                    fontSize: 20,#}
+    {#                }#}
+    {#            },#}
+    {#            detail: {#}
+    {#                show: false#}
+    {#            },#}
+    {#            data: [{#}
+    {#                value: tph_data.tx_uph[5],#}
+    {#                name: 'UPH'#}
+    {#            }]#}
+    {#        },#}
+    {#        {#}
+    {#            name: "昨日情况",#}
+    {#            radius: '85%',#}
+    {#            center: ['50%', '55%'],#}
+    {#            min: 0,#}
+    {#            max: 100,#}
+    {#            splitNumber: 10,#}
+    {#            type: 'gauge',#}
+    {#            axisLine: {#}
+    {#                lineStyle: {#}
+    {#                    width: 20,#}
+    {#                    color: [#}
+    {#                        [1, new echarts.graphic.LinearGradient(0, 0, 1, 0, [{#}
+    {#                            offset: 0.1,#}
+    {#                            color: "#C23531"#}
+    {#                        },#}
+    {#                            {#}
+    {#                                offset: 0.5,#}
+    {#                                color: "#C23531"#}
+    {#                            },#}
+    {#                            {#}
+    {#                                offset: 1,#}
+    {#                                color: "#C23531"#}
+    {#                            }#}
+    {#                        ])]#}
+    {#                    ]#}
+    {#                },#}
+    {##}
+    {#            },#}
+    {#            splitLine: {#}
+    {#                length: 20#}
+    {#            },#}
+    {#            axisLabel: { // 坐标轴小标记#}
+    {#                distance: -45,#}
+    {#                textStyle: { // 属性lineStyle控制线条样式#}
+    {#                    color: '#000',#}
+    {#                    fontSize: 18, //改变仪表盘内刻度数字的大小#}
+    {#                    fontWeight: 'bolder',#}
+    {#                    shadowColor: '#000', //默认透明#}
+    {#                }#}
+    {#            },#}
+    {#            axisTick: {#}
+    {#                splitNumber: 5#}
+    {#            },#}
+    {#            pointer: {#}
+    {#                width: 5,#}
+    {#                length:130#}
+    {#            },#}
+    {#            title: {#}
+    {#                offsetCenter: ['-40%', '70%'],#}
+    {#                textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE#}
+    {#                    fontWeight: 'bolder',#}
+    {#                    fontSize: 20,#}
+    {#                }#}
+    {#            },#}
+    {#            detail: {#}
+    {#                show: false#}
+    {#            },#}
+    {##}
+    {#            data: [{#}
+    {#                value: tph_data.tx_tph[5],#}
+    {#                name: 'TPH',#}
+    {#                itemStyle: {normal: {color: '#C23531'}}#}
+    {#            }#}
+    {#            ]#}
+    {#        }#}
+    {#    ]#}
+        {# }#}
+            var option_dx = {
+                title: {
+                    text: '虎门仓',
+                    x: 0,
+                    textStyle: {
+                        fontSize: 20
+                    }
+                },
+                grid: {
+                    left: '0.1%',
+                    right: '0.1%',
+                    bottom: '0.1%',
+                    containLabel: true
+                },
+                legend: {
+                    data: ['TPH', 'UPH'],
+                    textStyle: {
+                        fontSize: 20
+                    }
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                xAxis: {
+                    data: [tph_data.hm_tph_date[0],
+                        tph_data.hm_tph_date[1],
+                        tph_data.hm_tph_date[2],
+                        tph_data.hm_tph_date[3],
+                        tph_data.hm_tph_date[4],
+                        tph_data.hm_tph_date[5],
+                        tph_data.hm_tph_date[6],
+
+
+                    ]
+                },
+                yAxis: {
+                    type: 'value',
+                    min: tph_data.hm_tph[8],
+                    max: tph_data.hm_tph[7]
+                },
+                series: [
+                    {
+                        name: 'TPH',
+                        type: 'line',
+                        label: {
+                            normal: {
+                                show: true,
+                                formatter: '{c}'
+                            }
+                        },
+                        /*data: ['70.31', '78.68', '86.45', '83.79', '81.47', '81.77']    */
+                        data: [
+                            {value: tph_data.hm_tph[0], name: tph_data.hm_tph_date[0]},
+                            {value: tph_data.hm_tph[1], name: tph_data.hm_tph_date[1]},
+                            {value: tph_data.hm_tph[2], name: tph_data.hm_tph_date[2]},
+                            {value: tph_data.hm_tph[3], name: tph_data.hm_tph_date[3]},
+                            {value: tph_data.hm_tph[4], name: tph_data.hm_tph_date[4]},
+                            {value: tph_data.hm_tph[5], name: tph_data.hm_tph_date[5]},
+                            {value: tph_data.hm_tph[6], name: tph_data.hm_tph_date[6]},
+                        ]
+
+                    }, {
+                        name: 'UPH',
+                        type: 'line',
+                        label: {
+                            normal: {
+                                show: true,
+                                formatter: '{c}'
+                            }
+                        },
+                        data: [
+                            {value: tph_data.hm_uph[0], name: tph_data.hm_tph_date[0]},
+                            {value: tph_data.hm_uph[1], name: tph_data.hm_tph_date[1]},
+                            {value: tph_data.hm_uph[2], name: tph_data.hm_tph_date[2]},
+                            {value: tph_data.hm_uph[3], name: tph_data.hm_tph_date[3]},
+                            {value: tph_data.hm_uph[4], name: tph_data.hm_tph_date[4]},
+                            {value: tph_data.hm_uph[5], name: tph_data.hm_tph_date[5]},
+                            {value: tph_data.hm_uph[6], name: tph_data.hm_tph_date[6]},
+
+                        ]
+                    }
+                ]
+            };
+            var option_yy = {
+
+    title: [{
+                    text: '虎门仓',
+                    x: 250,
+                    top:10,
+                    textStyle: {
+                        fontSize: 25
+                    } },{text: '塘厦仓',
+                    x: 750,
+                    top:10,
+                    textStyle: {
+                        fontSize: 25
+                    } }],
+
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'cross',
+            crossStyle: {
+                color: '#999'
+            }
+        }
+    },
+
+    toolbox: {
+        feature: {
+            dataView: {show: true, readOnly: false},
+            magicType: {show: true, type: ['line', 'bar']},
+            restore: {show: true},
+            saveAsImage: {show: true}
+        }   ,
+           show : true,                                 //是否显示工具栏组件
+    orient:"horizontal",                        //工具栏 icon 的布局朝向'horizontal' 'vertical'
+    itemSize:15,                                 //工具栏 icon 的大小
+    itemGap:10,                                  //工具栏 icon 每项之间的间隔
+    showTitle:true,                             //是否在鼠标 hover 的时候显示每个工具 icon 的标题
+    feature : {
+        mark : {                                 // '辅助线开关'
+            show: true
+        },
+        dataView : {                            //数据视图工具，可以展现当前图表所用的数据，编辑后可以动态更新
+            show: true,                         //是否显示该工具。
+            title:"数据视图",
+            readOnly: false,                    //是否不可编辑（只读）
+            lang: ['数据视图', '关闭', '刷新'],  //数据视图上有三个话术，默认是['数据视图', '关闭', '刷新']
+            backgroundColor:"#fff",             //数据视图浮层背景色。
+            textareaColor:"#fff",               //数据视图浮层文本输入区背景色
+            textareaBorderColor:"#333",         //数据视图浮层文本输入区边框颜色
+            textColor:"#000",                    //文本颜色。
+            buttonColor:"#c23531",              //按钮颜色。
+            buttonTextColor:"#fff",             //按钮文本颜色。
+        },
+        magicType: {                            //动态类型切换
+            show: true,
+            title:"切换",                       //各个类型的标题文本，可以分别配置。
+            type: ['line', 'bar','tiled'],              //启用的动态类型，包括'line'（切换为折线图）, 'bar'（切换为柱状图）, 'stack'（切换为堆叠模式）, 'tiled'（切换为平铺模式）
+        },
+        restore : {                             //配置项还原。
+            show: true,                         //是否显示该工具。
+            title:"还原",
+        },
+        saveAsImage : {                         //保存为图片。
+            show: true,                         //是否显示该工具。
+            type:"png",                         //保存的图片格式。支持 'png' 和 'jpeg'。
+            name:"pic1",                        //保存的文件名称，默认使用 title.text 作为名称
+            backgroundColor:"#ffffff",        //保存的图片背景色，默认使用 backgroundColor，如果backgroundColor不存在的话会取白色
+            title:"保存为图片",
+            pixelRatio:1                        //保存图片的分辨率比例，默认跟容器相同大小，如果需要保存更高分辨率的，可以设置为大于 1 的值，例如 2
+        },
+        dataZoom :{                             //数据区域缩放。目前只支持直角坐标系的缩放
+            show: true,                         //是否显示该工具。
+            title:"缩放",                       //缩放和还原的标题文本
+            xAxisIndex:0,                       //指定哪些 xAxis 被控制。如果缺省则控制所有的x轴。如果设置为 false 则不控制任何x轴。如果设置成 3 则控制 axisIndex 为 3 的x轴。如果设置为 [0, 3] 则控制 axisIndex 为 0 和 3 的x轴
+            yAxisIndex:false,                   //指定哪些 yAxis 被控制。如果缺省则控制所有的y轴。如果设置为 false 则不控制任何y轴。如果设置成 3 则控制 axisIndex 为 3 的y轴。如果设置为 [0, 3] 则控制 axisIndex 为 0 和 3 的y轴
+        },
+    },
+    zlevel:0,                                   //所属图形的Canvas分层，zlevel 大的 Canvas 会放在 zlevel 小的 Canvas 的上面
+    z:2,                                         //所属组件的z分层，z值小的图形会被z值大的图形覆盖
+    left:"center",                              //组件离容器左侧的距离,'left', 'center', 'right','20%'
+    top:"top",                                   //组件离容器上侧的距离,'top', 'middle', 'bottom','20%'
+    right:"auto",                               //组件离容器右侧的距离,'20%'
+    bottom:"auto",                              //组件离容器下侧的距离,'20%'
+    width:"auto",                               //图例宽度
+    height:"auto"
+    },
+    legend: {
+        data: ['FBA出库量','小包出库量', '入库件量', '小包订单数'] ,
+        bottom:10,
+                            textStyle: {
+                        fontSize: 20
+                    }
+    },
+    xAxis: [
+        {
+            data: [zt_data.zt_date[0],
+                zt_data.zt_date[1],
+                zt_data.zt_date[2],
+                zt_data.zt_date[3],
+                zt_data.zt_date[4],
+                zt_data.zt_date[5],
+                zt_data.zt_date[6],
+
+
+
+            ],
+            axisPointer: {
+                type: 'shadow'
+            },
+             splitLine:{show: false}   ,
+            axisLine:{
+                show:false
+            },
+            axisTick:{
+                show:false
+            }
+        ,gridIndex: 0},
+                               {
+            data: [zt_data.zt_date[0],
+                zt_data.zt_date[1],
+                zt_data.zt_date[2],
+                zt_data.zt_date[3],
+                zt_data.zt_date[4],
+                zt_data.zt_date[5],
+                zt_data.zt_date[6],
+
+            ],
+            axisPointer: {
+                type: 'shadow'
+            },
+             splitLine:{show: false}   ,
+            axisLine:{
+                show:false
+            },
+            axisTick:{
+                show:false
+            }
+        ,gridIndex: 1}
+
+
+
+
+
+    ],
+
+    yAxis: [
+                {
+            type: 'value',
+            name: '件数',
+            min: 0,
+            max:zt_data.zt_1[14],
+            {#interval: 5,#}
+            axisLabel: {
+                formatter: function(value){
+                    return (value/10000).toFixed(0)+'万'
+              }
+            }  ,splitLine:{show: false} ,splitArea : {show : false} ,gridIndex: 0
+        },
+        {
+            type: 'value',
+            name: '件数',
+            min: 0,
+            max:zt_data.zt_1[15],
+            {#interval: 5,#}
+            axisLabel: {
+                formatter: function(value){
+                    return (value/10000).toFixed(0)+'万'
+              }
+            }  ,splitLine:{show: false} ,splitArea : {show : false}   ,gridIndex: 1
+        },
+        {   
+            type: 'value',
+            
+            min: -zt_data.zt_1[16],
+            max: zt_data.zt_1[16],
+            {#interval: 50,#}
+            axisLabel: {   show:false,
+                formatter: '{value}'+'W'
+            },
+            splitLine:{show: false} ,splitArea : {show : false}  ,gridIndex: 0
+        }
+            ,
+          {
+            type: 'value',
+
+            min: -zt_data.zt_1[17],
+            max: zt_data.zt_1[17],
+            {#interval: 50,#}
+            axisLabel: {   show:false,
+                formatter: '{value}'+'W'
+            },
+            splitLine:{show: false} ,splitArea : {show : false}  ,gridIndex: 1
+        }
+
+
+    ],
+
+                    grid: [
+                                {right:'53%',x:'4%'},
+                        {left: '53%',x2:'4%'}
+
+    ],
+    series: [
+        {
+            name: 'FBA出库量',
+            type: 'bar',
+            stack:'1',
+            data: [zt_data.zt_4[0],
+                zt_data.zt_4[1],
+                   zt_data.zt_4[2],
+                    zt_data.zt_4[3],
+                    zt_data.zt_4[4],
+                zt_data.zt_4[5]     ,
+                                zt_data.zt_4[6]
+
+            ],
+
+              label:{
+                normal:{
+                    show:true,
+                    color:'#000'
+                }
+            },
+            itemStyle:{
+                normal:{
+                    color:'#C23531'
+                }
+            } ,gridIndex: 0
+        },
+        {
+            name: '小包出库量',
+            type: 'bar',
+            stack:'1',
+
+
+            data: [zt_data.zt_2[0],
+                zt_data.zt_2[1],
+                   zt_data.zt_2[2],
+                    zt_data.zt_2[3],
+                    zt_data.zt_2[4],
+                    zt_data.zt_2[5],
+                    zt_data.zt_2[6]
+
+
+            ] ,
+
+
+            label:{
+                normal:{
+                    show:true
+                }
+            },
+                        itemStyle:{
+                normal:{
+                    color:'#2F4554'
+                }
+            } ,gridIndex: 0
+        },
+
+        {
+            name: '入库件量',
+            type: 'bar',
+            stack:'1',
+                       
+
+            data: [zt_data.zt_1[0],
+                zt_data.zt_1[1],
+                   zt_data.zt_1[2],
+                    zt_data.zt_1[3],
+                    zt_data.zt_1[4],
+                    zt_data.zt_1[5],
+                    zt_data.zt_1[6]
+
+            ],
+            label:{
+                normal:{
+                    show:true
+                }
+            },
+                    itemStyle:{
+                normal:{
+                    color:'#6AB0B8'
+                }
+            },gridIndex: 0
+        },
+
+        {
+            name: '小包订单数',
+            type: 'line',
+            yAxisIndex: 0,
+            data: [zt_data.zt_3[0],
+                zt_data.zt_3[1],
+                   zt_data.zt_3[2],
+                    zt_data.zt_3[3],
+                    zt_data.zt_3[4]  ,
+                    zt_data.zt_3[5],
+                                    zt_data.zt_3[6]
+
+                    ],
+            label:{
+                normal:{
+                    show:true
+                }
+            } ,gridIndex: 1,yAxisIndex: 2
+        } ,
+
+        {
+            name: 'FBA出库量',
+            type: 'bar',
+            stack:'2',
+
+
+            data: [
+                zt_data.zt_4[7],
+                   zt_data.zt_4[8],
+                    zt_data.zt_4[9],
+                    zt_data.zt_4[10] ,
+                    zt_data.zt_4[11] ,
+                zt_data.zt_4[12],
+                                zt_data.zt_4[13],
+
+
+            ],
+              label:{
+                normal:{
+                    show:true,
+                    color:'#000'
+                }
+
+            },
+            itemStyle:{
+                normal:{
+                    color:'#C23531'
+                }
+            },xAxisIndex: 1, yAxisIndex: 1
+        },
+        {
+            name: '小包出库量',
+            type: 'bar',
+            stack:'2',
+
+
+            data: [
+                    zt_data.zt_2[7],
+                    zt_data.zt_2[8],
+                    zt_data.zt_2[9],
+                    zt_data.zt_2[10],
+                    zt_data.zt_2[11],
+                    zt_data.zt_2[12],
+                    zt_data.zt_2[13],
+
+],
+
+
+            label:{
+                normal:{
+                    show:true
+                }
+            },
+                        itemStyle:{
+                normal:{
+                    color:'#2F4554'
+                }
+            },xAxisIndex: 1, yAxisIndex: 1
+        },
+
+        {
+            name: '入库件量',
+            type: 'bar',
+            stack:'2',
+
+
+            data: [
+                    zt_data.zt_1[7],
+                    zt_data.zt_1[8],
+                    zt_data.zt_1[9] ,
+                    zt_data.zt_1[10] ,
+                    zt_data.zt_1[11] ,
+                    zt_data.zt_1[12],
+                    zt_data.zt_1[13],
+
+            ],
+            label:{
+                normal:{
+                    show:true
+                }
+            },
+                    itemStyle:{
+                normal:{
+                    color:'#6AB0B8'
+                }
+            } ,xAxisIndex: 1, yAxisIndex: 1
+        },
+
+        {
+            name: '小包订单数',
+            type: 'line',
+            yAxisIndex: 0,
+            data: [
+                    zt_data.zt_3[7],
+                    zt_data.zt_3[8],
+                    zt_data.zt_3[9] ,
+                    zt_data.zt_3[10],
+                    zt_data.zt_3[11],
+                    zt_data.zt_3[12],
+                    zt_data.zt_3[13],
+
+
+            ],
+            label:{
+                normal:{
+                    show:true
+                }
+            },xAxisIndex: 1, yAxisIndex: 3
+        }
+
+
+          
+    ]
+            }
+
+                var option_yy2 = {
+
+    title: {
+                    text: '塘厦仓',
+                    x: 'center',
+                    top:10,
+                    textStyle: {
+                        fontSize: 30
+                    } },
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'cross',
+            crossStyle: {
+                color: '#999'
+            }
+        }
+    },
+
+    toolbox: {
+        feature: {
+            dataView: {show: true, readOnly: false},
+            magicType: {show: true, type: ['line', 'bar']},
+            restore: {show: true},
+            saveAsImage: {show: true}
+        }
+    },
+    legend: {
+        data: ['FBA出库量','小包出库量', '入库件量', '小包订单数'] ,
+        bottom:10,
+                            textStyle: {
+                        fontSize: 20
+                    }
+    },
+    xAxis: [
+        {
+            data: [zt_data.zt_date[0],
+                zt_data.zt_date[1],
+                zt_data.zt_date[2],
+                zt_data.zt_date[3],
+                zt_data.zt_date[4]
+
+            ],
+            axisPointer: {
+                type: 'shadow'
+            },
+             splitLine:{show: false}   ,
+            axisLine:{
+                show:false
+            },
+            axisTick:{
+                show:false
+            }
+        }
+    ],
+
+    yAxis: [
+        {
+            type: 'value',
+
+            min: -zt_data.zt_1[13],
+            max: zt_data.zt_1[13],
+            {#interval: 50,#}
+            axisLabel: {   show:false,
+                formatter: '{value}'+'W'
+            },
+            splitLine:{show: false} ,splitArea : {show : false}
+        },
+        {
+            type: 'value',
+            name: '件数',
+            min: 0,
+            max:zt_data.zt_1[11],
+            {#interval: 5,#}
+            axisLabel: {
+                formatter: function(value){
+                    return (value/10000).toFixed(0)+'万'
+              }
+            }  ,splitLine:{show: false} ,splitArea : {show : false}
+        }
+    ],
+    series: [
+        {
+            name: 'FBA出库量',
+            type: 'bar',
+            stack:'1',
+                        yAxisIndex: 1,
+
+            data: [zt_data.zt_4[5],
+                zt_data.zt_4[6],
+                   zt_data.zt_4[7],
+                    zt_data.zt_4[8],
+                    zt_data.zt_4[9]],
+              label:{
+                normal:{
+                    show:true,
+                    color:'#000'
+                }
+
+            },
+            itemStyle:{
+                normal:{
+                    color:'#C23531'
+                }
+            }
+        },
+        {
+            name: '小包出库量',
+            type: 'bar',
+            stack:'1',
+                        yAxisIndex: 1,
+
+            data: [zt_data.zt_2[5],
+                zt_data.zt_2[6],
+                   zt_data.zt_2[7],
+                    zt_data.zt_2[8],
+                    zt_data.zt_2[9]],
+
+
+
+            label:{
+                normal:{
+                    show:true
+                }
+            },
+                        itemStyle:{
+                normal:{
+                    color:'#2F4554'
+                }
+            }
+        },
+
+        {
+            name: '入库件量',
+            type: 'bar',
+            stack:'1',
+                        yAxisIndex: 1,
+
+            data: [zt_data.zt_1[5],
+                zt_data.zt_1[6],
+                   zt_data.zt_1[7],
+                    zt_data.zt_1[8],
+                    zt_data.zt_1[9]
+            ],
+            label:{
+                normal:{
+                    show:true
+                }
+            },
+                    itemStyle:{
+                normal:{
+                    color:'#6AB0B8'
+                }
+            }
+        },
+
+        {
+            name: '小包订单数',
+            type: 'line',
+            yAxisIndex: 0,
+            data: [zt_data.zt_3[5],
+                zt_data.zt_3[6],
+                   zt_data.zt_3[7],
+                    zt_data.zt_3[8],
+                    zt_data.zt_3[9]],
+            label:{
+                normal:{
+                    show:true
+                }
+            }
+        }
+    ]
+            }
+            var option_db = {
+
+    title: [{
+                    text: '虎门仓',
+                    x: 'center',
+                    top:10,
+                    textStyle: {
+                        fontSize: 25
+                    } },{text: '塘厦仓',
+                    x:  'center',
+                    top:220,
+                    textStyle: {
+                        fontSize: 25
+                    } }],
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'cross',
+            crossStyle: {
+                color: '#999'
+            }
+        }
+    },
+
+    {#toolbox: {#}
+    {#    feature: {#}
+    {#        dataView: {show: true, readOnly: false},#}
+    {#        magicType: {show: true, type: ['line', 'bar']},#}
+    {#        restore: {show: true},#}
+    {#        saveAsImage: {show: true}#}
+    {#    }   ,#}
+    {#       show : true,                                 //是否显示工具栏组件#}
+    {#orient:"horizontal",                        //工具栏 icon 的布局朝向'horizontal' 'vertical'#}
+    {#itemSize:15,                                 //工具栏 icon 的大小#}
+    {#itemGap:10,                                  //工具栏 icon 每项之间的间隔#}
+    {#showTitle:true,                             //是否在鼠标 hover 的时候显示每个工具 icon 的标题#}
+    {#feature : {#}
+    {#    mark : {                                 // '辅助线开关'#}
+    {#        show: true#}
+    {#    },#}
+    {#    dataView : {                            //数据视图工具，可以展现当前图表所用的数据，编辑后可以动态更新#}
+    {#        show: true,                         //是否显示该工具。#}
+    {#        title:"数据视图",#}
+    {#        readOnly: false,                    //是否不可编辑（只读）#}
+    {#        lang: ['数据视图', '关闭', '刷新'],  //数据视图上有三个话术，默认是['数据视图', '关闭', '刷新']#}
+    {#        backgroundColor:"#fff",             //数据视图浮层背景色。#}
+    {#        textareaColor:"#fff",               //数据视图浮层文本输入区背景色#}
+    {#        textareaBorderColor:"#333",         //数据视图浮层文本输入区边框颜色#}
+    {#        textColor:"#000",                    //文本颜色。#}
+    {#        buttonColor:"#c23531",              //按钮颜色。#}
+    {#        buttonTextColor:"#fff",             //按钮文本颜色。#}
+    {#    },#}
+    {#    magicType: {                            //动态类型切换#}
+    {#        show: true,#}
+    {#        title:"切换",                       //各个类型的标题文本，可以分别配置。#}
+    {#        type: ['line', 'bar','tiled'],              //启用的动态类型，包括'line'（切换为折线图）, 'bar'（切换为柱状图）, 'stack'（切换为堆叠模式）, 'tiled'（切换为平铺模式）#}
+    {#    },#}
+    {#    restore : {                             //配置项还原。#}
+    {#        show: true,                         //是否显示该工具。#}
+    {#        title:"还原",#}
+    {#    },#}
+    {#    saveAsImage : {                         //保存为图片。#}
+    {#        show: true,                         //是否显示该工具。#}
+    {#        type:"png",                         //保存的图片格式。支持 'png' 和 'jpeg'。#}
+    {#        name:"pic1",                        //保存的文件名称，默认使用 title.text 作为名称#}
+    {#        backgroundColor:"#ffffff",        //保存的图片背景色，默认使用 backgroundColor，如果backgroundColor不存在的话会取白色#}
+    {#        title:"保存为图片",#}
+    {#        pixelRatio:1                        //保存图片的分辨率比例，默认跟容器相同大小，如果需要保存更高分辨率的，可以设置为大于 1 的值，例如 2#}
+    {#    },#}
+    {#    dataZoom :{                             //数据区域缩放。目前只支持直角坐标系的缩放#}
+    {#        show: true,                         //是否显示该工具。#}
+    {#        title:"缩放",                       //缩放和还原的标题文本#}
+    {#        xAxisIndex:0,                       //指定哪些 xAxis 被控制。如果缺省则控制所有的x轴。如果设置为 false 则不控制任何x轴。如果设置成 3 则控制 axisIndex 为 3 的x轴。如果设置为 [0, 3] 则控制 axisIndex 为 0 和 3 的x轴#}
+    {#        yAxisIndex:false,                   //指定哪些 yAxis 被控制。如果缺省则控制所有的y轴。如果设置为 false 则不控制任何y轴。如果设置成 3 则控制 axisIndex 为 3 的y轴。如果设置为 [0, 3] 则控制 axisIndex 为 0 和 3 的y轴#}
+    {#    },#}
+    {#},#}
+    {#zlevel:0,                                   //所属图形的Canvas分层，zlevel 大的 Canvas 会放在 zlevel 小的 Canvas 的上面#}
+    {#z:2,                                         //所属组件的z分层，z值小的图形会被z值大的图形覆盖#}
+    {#left:"center",                              //组件离容器左侧的距离,'left', 'center', 'right','20%'#}
+    {#top:"top",                                   //组件离容器上侧的距离,'top', 'middle', 'bottom','20%'#}
+    {#right:"auto",                               //组件离容器右侧的距离,'20%'#}
+    {#bottom:"auto",                              //组件离容器下侧的距离,'20%'#}
+    {#width:"auto",                               //图例宽度#}
+    {#height:"auto"#}
+    {#},#}
+    legend: {
+        data: ['调拨入','调拨出', '总订单量'] ,
+        bottom:10,
+                            textStyle: {
+                        fontSize: 20
+                    }
+    },
+    xAxis: [
+        {
+            data: [                db_data.db_date[0],
+                db_data.db_date[1],
+                db_data.db_date[2],
+                db_data.db_date[3],
+                db_data.db_date[4],
+                db_data.db_date[5],
+                 db_data.db_date[6]
+
+            ],
+            axisPointer: {
+                type: 'shadow'
+            },
+             splitLine:{show: true}   ,
+            axisLine:{
+                show:true
+            },
+            axisTick:{
+                show:true
+            }
+        ,gridIndex: 0},
+                               {
+            data: [
+                db_data.db_date[0],
+                db_data.db_date[1],
+                db_data.db_date[2],
+                db_data.db_date[3],
+                db_data.db_date[4],
+                db_data.db_date[5],
+                 db_data.db_date[6]
+
+
+            ],
+            axisPointer: {
+                type: 'shadow'
+            },
+             splitLine:{show: true}   ,
+            axisLine:{
+                show:true
+            },
+            axisTick:{
+                show:true
+            }
+        ,gridIndex: 1}
+
+
+
+
+
+    ],
+
+    yAxis: [
+                {
+            type: 'value',
+            name: '订单量',
+            min: 0,
+            max:db_data.db_in[14],
+            {#interval: 5,#}
+            axisLabel: {
+                formatter: function(value){
+                    return (value).toFixed(0)
+              }
+            }  ,splitLine:{show: false} ,splitArea : {show : false} ,gridIndex: 0
+        },
+        {
+            type: 'value',
+            name: '订单量',
+            min: 0,
+            max:db_data.db_in[15],
+            {#interval: 5,#}
+            axisLabel: {
+                formatter: function(value){
+                    return (value).toFixed(0)
+              }
+            }  ,splitLine:{show: false} ,splitArea : {show : false}   ,gridIndex: 1
+        },
+        {
+            type: 'value',
+
+            min: -db_data.db_in[16],
+            max: db_data.db_in[16],
+            {#interval: 50,#}
+            axisLabel: {   show:false,
+                formatter: '{value}'+'W'
+            },
+            splitLine:{show: false} ,splitArea : {show : false}  ,gridIndex: 0
+        }
+            ,
+          {
+            type: 'value',
+
+            min: -db_data.db_in[17],
+            max: db_data.db_in[17],
+            {#interval: 50,#}
+            axisLabel: {   show:false,
+                formatter: '{value}'+'W'
+            },
+            splitLine:{show: false} ,splitArea : {show : false}  ,gridIndex: 1
+        }
+
+
+    ],
+                    grid: [
+                              {bottom: '60%'},
+        {top: '60%'}
+
+    ],
+    series: [
+        {
+            name: '调拨出',
+            type: 'bar',
+            stack:'1',
+            data: [
+                db_data.db_out[0] ,
+                db_data.db_out[1]  ,
+                db_data.db_out[2] ,
+                db_data.db_out[3] ,
+                db_data.db_out[4] ,
+                db_data.db_out[5],
+                db_data.db_out[6]
+
+
+
+            ],
+
+              label:{
+                normal:{
+                    show:true,
+                    color:'#000'
+                }
+            },
+            itemStyle:{
+                normal:{
+                    color:'#C23531'
+                }
+            } ,gridIndex: 0
+        },
+
+        {
+            name: '调拨入',
+            type: 'bar',
+            stack:'2',
+
+
+            data: [
+                db_data.db_in[0],
+                db_data.db_in[1],
+                db_data.db_in[2],
+                db_data.db_in[3],
+                db_data.db_in[4],
+                db_data.db_in[5],
+                db_data.db_in[6]
+            ],
+            label:{
+                normal:{
+                    show:true
+                }
+            },
+                    itemStyle:{
+                normal:{
+                    color:'#6AB0B8'
+                }
+            },gridIndex: 0
+        },
+
+        {
+            name: '总订单量',
+            type: 'line',
+            yAxisIndex: 0,
+            data: [
+                db_data.db_total[0],
+                db_data.db_total[1],
+                db_data.db_total[2],
+                db_data.db_total[3],
+                db_data.db_total[4],
+                db_data.db_total[5],
+                db_data.db_total[6]
+
+                    ],
+            label:{
+                normal:{
+                    show:true
+                }
+            } ,gridIndex: 1,yAxisIndex: 2
+        } ,
+
+        {
+            name: '调拨出',
+            type: 'bar',
+            stack:'3',
+
+
+            data: [
+
+               db_data.db_out[7],
+                  db_data.db_out[8],
+                   db_data.db_out[9],
+                   db_data.db_out[10] ,
+                   db_data.db_out[11] ,
+               db_data.db_out[12],
+                               db_data.db_out[13],
+
+            ],
+              label:{
+                normal:{
+                    show:true,
+                    color:'#000'
+                }
+
+            },
+            itemStyle:{
+                normal:{
+                    color:'#C23531'
+                }
+            },xAxisIndex: 1, yAxisIndex: 1
+        },
+
+        {
+            name: '入库件量',
+            type: 'bar',
+            stack:'4',
+
+
+            data: [
+               db_data.db_in[7],
+                  db_data.db_in[8],
+                   db_data.db_in[9],
+                   db_data.db_in[10] ,
+                   db_data.db_in[11] ,
+               db_data.db_in[12],
+                       db_data.db_in[13],
+            ],
+            label:{
+                normal:{
+                    show:true
+                }
+            },
+                    itemStyle:{
+                normal:{
+                    color:'#6AB0B8'
+                }
+            } ,xAxisIndex: 1, yAxisIndex: 1
+        },
+
+        {
+            name: '总订单量',
+            type: 'line',
+            yAxisIndex: 0,
+            data: [
+               db_data.db_total[7],
+                  db_data.db_total[8],
+                   db_data.db_total[9],
+                   db_data.db_total[10] ,
+                   db_data.db_total[11] ,
+               db_data.db_total[12],
+                               db_data.db_total[13],
+
+            ],
+            label:{
+                normal:{
+                    show:true
+                }
+            },xAxisIndex: 1, yAxisIndex: 3
+        }
+
+
+
+    ]
+            }
+
+
+
+            var option_dx2 = {
+                title: {
+                    text: '塘厦仓',
+                    x: 0,
+                    textStyle: {
+                        fontSize: 20
+                    }
+
+                },
+                grid: {
+                    left: '0.1%',
+                    right: '0.1%',
+                    bottom: '0.1%',
+                    containLabel: true
+                },
+                legend: {
+                    data: ['TPH', 'UPH'],
+                    textStyle: {
+                        fontSize: 20
+                    }
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                xAxis: {
+                    data: [tph_data.hm_tph_date[0],
+                        tph_data.hm_tph_date[1],
+                        tph_data.hm_tph_date[2],
+                        tph_data.hm_tph_date[3],
+                        tph_data.hm_tph_date[4],
+                        tph_data.hm_tph_date[5],
+                        tph_data.hm_tph_date[6],
+                    ]
+
+                },
+                yAxis: {
+                    type: 'value',
+                    min: tph_data.tx_uph[8],
+                    max: tph_data.tx_uph[7]
+                },
+                series: [
+                    {
+                        name: 'TPH',
+                        type: 'line',
+                        label: {
+                            normal: {
+                                show: true,
+                                formatter: '{c}'
+                            }
+                        },
+                        data: [
+                            {value: tph_data.tx_tph[0], name: tph_data.hm_tph_date[0]},
+                            {value: tph_data.tx_tph[1], name: tph_data.hm_tph_date[1]},
+                            {value: tph_data.tx_tph[2], name: tph_data.hm_tph_date[2]},
+                            {value: tph_data.tx_tph[3], name: tph_data.hm_tph_date[3]},
+                            {value: tph_data.tx_tph[4], name: tph_data.hm_tph_date[4]},
+                            {value: tph_data.tx_tph[5], name: tph_data.hm_tph_date[5]},
+                            {value: tph_data.tx_tph[6], name: tph_data.hm_tph_date[6]},
+
+
+                        ]
+                    }, {
+                        name: 'UPH',
+                        type: 'line',
+                        label: {
+                            normal: {
+                                show: true,
+                                formatter: '{c}'
+                            }
+                        },
+                        data: [
+                            {value: tph_data.tx_uph[0], name: tph_data.tx_tph_date[0]},
+                            {value: tph_data.tx_uph[1], name: tph_data.tx_tph_date[1]},
+                            {value: tph_data.tx_uph[2], name: tph_data.tx_tph_date[2]},
+                            {value: tph_data.tx_uph[3], name: tph_data.tx_tph_date[3]},
+                            {value: tph_data.tx_uph[4], name: tph_data.tx_tph_date[4]},
+                            {value: tph_data.tx_uph[5], name: tph_data.tx_tph_date[5]},
+                            {value: tph_data.tx_uph[6], name: tph_data.tx_tph_date[6]},
+
+
+                        ]
+                    }
+                ]
+            };
+            option_zl.title = [
+                {
+                    show: true,
+                    text: '虎门仓',
+                    subtext: (option_zl.series[0].data[0].value + option_zl.series[0].data[1].value + option_zl.series[0].data[2].value).toFixed(2) + '万元',
+                    subtextStyle: {
+                        color: '#000',
+                        fontSize: 16,
+                        fontWeight: 'bold'
+                    },
+                    x: 'center',
+                    y: '27%',
+                    textStyle: {
+                        fontSize: 35
+                    }
+                },
+                {
+                    show: true,
+                    text: '塘厦仓',
+                    subtext: (option_zl.series[1].data[0].value + option_zl.series[1].data[1].value + option_zl.series[1].data[2].value).toFixed(2) + '万元',
+                    subtextStyle: {
+                        color: '#000',
+                        fontSize: 16,
+                        fontWeight: 'bold'
+                    },
+                    x: 'center',
+                    y: '72%',
+                    textStyle: {
+                        fontSize: 35
+                    }
+                }
+            ]
+            myCharts();
+            {#function btn_hm_time() {#}
+            {#    if (document.getElementById('btn_hm_time').className == 'btn btn-primary') {#}
+            {#        document.getElementById('btn_hm_time').className = 'btn btn-success';#}
+            {#        document.getElementById('btn_tx_time').className = 'btn btn-primary';#}
+            {#        document.getElementById('main_sx').style.display = 'block';#}
+            {#        document.getElementById('main_sx2').style.display = 'none';#}
+            {#    }#}
+            {##}
+            {#function btn_tx_time() {#}
+            {#    if (document.getElementById('btn_tx_time').className == 'btn btn-primary') {#}
+            {#        document.getElementById('btn_tx_time').className = 'btn btn-success';#}
+            {#        document.getElementById('btn_hm_time').className = 'btn btn-primary';#}
+            {#        document.getElementById('main_sx2').style.display = 'block';#}
+            {#        document.getElementById('main_sx').style.display = 'none';#}
+            {#        console.log(myCharts())#}
+            {#        myCharts()[0].resize()#}
+            {#        }#}
+
+            {#function btn_hm_tph() {#}
+            {#    if (document.getElementById('btn_hm_tph').className == 'btn btn-primary') {#}
+            {#        document.getElementById('btn_hm_tph').className = 'btn btn-success';#}
+            {#        document.getElementById('btn_tx_tph').className = 'btn btn-primary';#}
+            {#        document.getElementById('main_dx').style.display = 'block';#}
+            {#        document.getElementById('main_dx2').style.display = 'none';#}
+            {#    }#
+    {#function btn_tx_tph() {#}
+            {#    if (document.getElementById('btn_tx_tph').className == 'btn btn-primary') {#}
+            {#        document.getElementById('btn_tx_tph').className = 'btn btn-success';#}
+            {#        document.getElementById('btn_hm_tph').className = 'btn btn-primary';#}
+            {#        document.getElementById('main_dx2').style.display = 'block';#}
+            {#        document.getElementById('main_dx').style.display = 'none';#}
+            {#        myCharts()[1].resize()#}
+            {#        }#}
+
+            {#function getD1() {#}
+            {#    var date = new Date();#}
+            {#    var d1 = date.toLocaleString();#}
+            {#    var div1 = document.getElementById("times");#}
+            {#    div1.innerHTML = d1;#}
+            {##}
+            {##}
+            {#setInterval("getD1();", 1000);#}
+
+            {#RK_data();#}
+            var myDate = new Date();
+            mtime = myDate.getMonth() + 1;
+            dtime = myDate.getDate();
+            htime = myDate.getHours();
+            if(htime >=8){
+                document.getElementById('title_time').innerHTML = '实时业务积压监控-更新时间:'+ mtime + '月' + dtime + '日  08:00';
+            }
+            if(htime >=12){
+                document.getElementById('title_time').innerHTML = '实时业务积压监控-更新时间:'+ mtime + '月' + dtime + '日  12:00';
+            }
+            if(htime >=17){
+                document.getElementById('title_time').innerHTML = '实时业务积压监控-更新时间:'+ mtime + '月' + dtime + '日  17:00';
+            }
+            if(htime >=8){
+                document.getElementById('ry_time').innerHTML = '人员数据-更新时间:'+ mtime + '月' + (dtime-1) + '日';
+            }
+
+
+            if(htime >=8){
+                document.getElementById('dcl_time').innerHTML = '业务达成率-更新时间:'+ mtime + '月' + (dtime-1) + '日';
+            }
+            if(htime >=8){
+                document.getElementById('TPH_time').innerHTML = 'TPH&UPH-更新时间:'+ mtime + '月' + (dtime-1) + '日  08:00';
+            }
+           if(htime >=12){
+                document.getElementById('TPH_time').innerHTML = 'TPH&UPH-更新时间:'+ mtime + '月' + dtime + '日  12:00';
+            }
+            if(htime >=17){
+                document.getElementById('TPH_time').innerHTML = 'TPH&UPH-更新时间:'+ mtime + '月' + dtime + '日  17:00';
+            }
+
+
+
+
+
+             if(htime >=8){
+                document.getElementById('DB_time').innerHTML = '调拨情况-更新时间:'+ mtime + '月' + (dtime) + '日  08:00';
+            }
+             if(htime >=12){
+                document.getElementById('DB_time').innerHTML = '调拨情况-更新时间:'+ mtime + '月' + dtime + '日  12:00';
+            }
+            if(htime >=17){
+                document.getElementById('DB_time').innerHTML = '调拨情况-更新时间:'+ mtime + '月' + dtime + '日  17:00';
+            }
+
+            function text_color() {
+                id_arr = ['RY_013','RY_014','RY_023','RY_024','RY_033','RY_034','RY_043','RY_044','RY_053','RY_054','RY_063','RY_064','RY_073','RY_074','RY_083','RY_084','RY_093','RY_094']
+                for(i = 0;i<id_arr.length;i++){
+                    if (document.getElementById(id_arr[i]).innerHTML == 0){
+                        document.getElementById(id_arr[i]).style.fontSize = '15px';
+                        document.getElementById(id_arr[i]).style.color = '#fff';
+                    }
+                    if (document.getElementById(id_arr[i]).innerHTML > 0){
+                        document.getElementById(id_arr[i]).style.fontSize = '15px';
+                        document.getElementById(id_arr[i]).style.color = '#FF0000';
+                        document.getElementById(id_arr[i]).innerHTML = '+' + document.getElementById(id_arr[i]).innerHTML
+                    }
+                    if (document.getElementById(id_arr[i]).innerHTML < 0){
+                        document.getElementById(id_arr[i]).style.fontSize = '15px';
+                        document.getElementById(id_arr[i]).style.color = '#0F990F';
+                    }
+                }
+            }
+            text_color()
+            DCL_data();
+            DCL2_data();
+
+
+</script>
+</body>
+</html>
